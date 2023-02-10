@@ -1,0 +1,20 @@
+{
+  "name": "comision-45110",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110/issues"
+  },
+  "homepage": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110#readme"
+}
