@@ -5,28 +5,33 @@ class ProductManager {
     products;
     constructor(path) {
         this.path = path;
-        try {
-            this.loadFile();
+        (async ()=> {try {
+            await this.loadFile();
         } catch {
+            throw new Error(error);
+        }
+    })}
+    async loadFile(){
+        try {
+            const productsLoad = await fs.promises.readFile(this.path);
+            return this.products = JSON.parse(productsLoad)
+            /* this.products = JSON.parse(fs.readFileSync(this.path, "utf-8")); */
+        } catch (error) {
             this.products = [];
-            this.saveFile();
+            await this.saveFile();
         }
     }
-    loadFile(){
+    async saveFile(){
         try {
-            this.products = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+            const productsSave = JSON.stringify(this.products);
+            await fs.promises.writeFile(this.path, productsSave);
+            /* fs.writeFileSync(this.path, JSON.stringify(this.products)); */
         } catch (error) {
             throw new Error(error);
         }
     }
-    saveFile(){
-        try {
-            fs.writeFileSync(this.path, JSON.stringify(this.products));
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-    addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct(title, description, price, thumbnail, code, stock) {
+        await this.loadFile()
         if(this.products.find((product) => product.code === code)) {
             return console.log("Code assigned");
         } else if(title && description && price && thumbnail && stock) {
@@ -34,33 +39,38 @@ class ProductManager {
             const id = ProductManager.idCreator
             const product = {id, title, description, price, thumbnail, code, stock};
             this.products.push(product);
-            this.saveFile();
+            await this.saveFile();
         } else {
             return console.warn("Faltan completar datos");
         }
     }
-    getProducts() {
-        this.loadFile();
+    async getProducts() {
+        await this.loadFile();
         console.log(this.products);
     }
-    getProductById(id){
+    async getProductById(id){
+        await this.loadFile();
         return this.products.find((product) => product.id === id) || console.warn("Product ID not found");
+        
     }
-    updateProduct(id, data){
+    async updateProduct(id, data){
+        await this.loadFile();
         if(this.products.find((product) => product.id === id)){
             const updatedProduct = this.products.map((product) => product.id === id ? {...product, ...data} : product)
             this.products = updatedProduct;
-            return this.saveFile();
+            return await this.saveFile();
         }
         console.warn("Product not updated. ID not found");
     }
-    deleteProduct(id){
+    async deleteProduct(id){
+        await this.loadFile();
         const index = this.products.indexOf(this.products.find((product) => product.id === id));
         if(index === -1){
             return console.warn("Product not deleted. ID not found")
         }
         this.products.splice(index, 1);
-        this.saveFile();
+        console.log(this.products)
+        await this.saveFile();
     }
 }
 
