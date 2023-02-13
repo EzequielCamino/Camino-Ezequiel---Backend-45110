@@ -15,7 +15,6 @@ class ProductManager {
         try {
             const productsLoad = await fs.promises.readFile(this.path);
             return this.products = JSON.parse(productsLoad)
-            /* this.products = JSON.parse(fs.readFileSync(this.path, "utf-8")); */
         } catch (error) {
             this.products = [];
             await this.saveFile();
@@ -25,7 +24,6 @@ class ProductManager {
         try {
             const productsSave = JSON.stringify(this.products);
             await fs.promises.writeFile(this.path, productsSave);
-            /* fs.writeFileSync(this.path, JSON.stringify(this.products)); */
         } catch (error) {
             throw new Error(error);
         }
@@ -35,7 +33,7 @@ class ProductManager {
         if(this.products.find((product) => product.code === code)) {
             return console.log("Code assigned");
         } else if(title && description && price && thumbnail && stock) {
-            ProductManager.idCreator++;
+            await ProductManager.idCreator++;
             const id = ProductManager.idCreator
             const product = {id, title, description, price, thumbnail, code, stock};
             this.products.push(product);
@@ -75,18 +73,22 @@ class ProductManager {
 }
 
 
-/* TESTING CODE */
+/************* TESTING CODE *************/
 
-/* let newProducts = new ProductManager("products.json");
-newProducts.getProducts();
-newProducts.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
-newProducts.addProduct("producto prueba2", "Este es otro producto prueba", 200, "Sin imagen", "abc1234", 25);
-newProducts.getProducts();
-newProducts.getProductById(5);
-newProducts.getProductById(2);
-newProducts.updateProduct(5, {title: 'producto prueba updateado'});
-newProducts.updateProduct(1, {title: 'producto prueba updateado'});
-newProducts.getProducts();
-newProducts.deleteProduct(5);
-newProducts.deleteProduct(2);
-newProducts.getProducts(); */
+/* async function main(){
+    const newProducts = new ProductManager("products.json");
+    await newProducts.getProducts();
+    await newProducts.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
+    await newProducts.addProduct("producto prueba2", "Este es otro producto prueba", 200, "Sin imagen", "abc1234", 25);
+    await newProducts.getProducts();
+    await newProducts.getProductById(5);
+    await newProducts.getProductById(2);
+    await newProducts.updateProduct(5, {title: 'producto prueba updateado'});
+    await newProducts.updateProduct(1, {title: 'producto prueba updateado'});
+    await newProducts.getProducts();
+    await newProducts.deleteProduct(5);
+    await newProducts.deleteProduct(2);
+    await newProducts.getProducts();
+}
+
+main(); */
