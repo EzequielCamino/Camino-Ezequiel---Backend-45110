@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110/issues"
   },
-  "homepage": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110#readme"
+  "homepage": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
