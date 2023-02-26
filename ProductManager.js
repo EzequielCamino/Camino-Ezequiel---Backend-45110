@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const express = require("express");
 class ProductManager {
     static idCreator = 0;
     products;
@@ -28,19 +28,18 @@ class ProductManager {
             throw new Error(error);
         }
     }
-    async addProduct(title, description, price, thumbnail, code, stock) {
+    async addProduct(product) {
         await this.loadFile()
-        if(this.products.find((product) => product.code === code)) {
-            return console.log("Code assigned");
-        } else if(title && description && price && thumbnail && stock) {
-            ProductManager.idCreator++;
-            const id = ProductManager.idCreator
-            const product = {id, title, description, price, thumbnail, code, stock};
-            this.products.push(product);
-            await this.saveFile();
-        } else {
-            return console.warn("Faltan completar datos");
+        if(this.products.find((prod) => prod.code === product.code)) {
+            console.log("Code assigned");
+            return null
         }
+        ProductManager.idCreator++;
+        const id = ProductManager.idCreator
+        const finalProduct = {id, ...product};
+        this.products.push(finalProduct);
+        await this.saveFile();
+        return id;
     }
     async getProducts() {
         await this.loadFile();
@@ -54,20 +53,25 @@ class ProductManager {
     async updateProduct(id, data){
         await this.loadFile();
         if(this.products.find((product) => product.id === id)){
-            const updatedProduct = this.products.map((product) => product.id === id ? {...product, ...data} : product)
+            const updatedProduct = this.products.map((product) => product.id == id ? {...product, ...data} : product)
             this.products = updatedProduct;
-            return await this.saveFile();
+            await this.saveFile();
+            return id
         }
+        return null
         console.warn("Product not updated. ID not found");
     }
     async deleteProduct(id){
         await this.loadFile();
-        const index = this.products.indexOf(this.products.find((product) => product.id === id));
+        const productFind = await this.products.find((product) => product.id === id)
+        const index = await this.products.indexOf(productFind);
         if(index === -1){
-            return console.warn("Product not deleted. ID not found")
+            console.warn("Product not deleted. ID not found")
+            return null
         }
         this.products.splice(index, 1);
         await this.saveFile();
+        return id
     }
 }
 
