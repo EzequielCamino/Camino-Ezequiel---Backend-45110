@@ -48,7 +48,7 @@ class ProductManager {
     }
     async getProductById(id){
         await this.loadFile();
-        return this.products.find((product) => product.id === id) || console.warn("Product ID not found");
+        return this.products.find((product) => product.id === id);
         
     }
     async updateProduct(id, data){

@@ -79,10 +79,15 @@ route.put("/:pid", async (req, res) => {
 
 route.delete("/:pid", async (req, res) =>{
     const pid = Number(req.params.pid);
+    const imgExists = await productManager.getProductById(pid);
     const response = await productManager.deleteProduct(pid);
-    response ?
-    res.status(201).send({DeletedProductID: response})
-    :res.status(400).send({error: 'Product not deleted. ID not found'});
+    if(response){
+        if(imgExists.thumbnails){
+            deleteFiles(imgExists.thumbnails)
+        } 
+        return res.status(201).send({DeletedProductID: response})
+    }
+    res.status(400).send({error: 'Product not deleted. ID not found'});
 })
 
 module.exports = route;
