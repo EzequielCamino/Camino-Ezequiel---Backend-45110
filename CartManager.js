@@ -1,9 +1,9 @@
-/* const fs = require('fs');
+const fs = require('fs');
 const express = require("express");
 
 class CartManager {
-    static idCreator = 0;
-    products;
+    static idCreator = 1;
+    carts;
     constructor(path) {
         this.path = path;
         (async ()=> {try {
@@ -14,19 +14,52 @@ class CartManager {
     })}
     async loadFile(){
         try {
-            const productsLoad = await fs.promises.readFile(this.path);
-            return this.products = JSON.parse(productsLoad)
+            const cartsLoad = await fs.promises.readFile(this.path);
+            return this.carts = JSON.parse(cartsLoad)
         } catch (error) {
-            this.products = [];
+            this.carts = [];
             await this.saveFile();
         }
     }
     async saveFile(){
         try {
-            const productsSave = JSON.stringify(this.products);
-            await fs.promises.writeFile(this.path, productsSave);
+            const cartsSave = JSON.stringify(this.carts);
+            await fs.promises.writeFile(this.path, cartsSave);
         } catch (error) {
             throw new Error(error);
         }
     }
-} */
+    async getCarts() {
+        await this.loadFile();
+        return this.carts;
+    }
+    async addCart(){
+        await this.loadFile();
+        const newid = CartManager.idCreator++;
+        const newCart = {'id': newid, 'products': []};
+        this.carts.push(newCart);
+        await this.saveFile();
+        return newCart
+    }
+    async addProductToCart(cid, pid) {
+        await this.loadFile();
+        const selectedCart = this.carts.find((cart)=> cart.id === cid);
+        if(!selectedCart){
+            return null
+        }
+        const productToAdd = selectedCart.products.find((prod)=> prod.product === pid)
+        if(!productToAdd){
+            const newProduct = {'product': pid, 'quantity': 1};
+            selectedCart.products.push(newProduct);
+            await this.saveFile();
+            return newProduct
+        }
+        const cartIndex = this.carts.indexOf(selectedCart);
+        const productIndex = selectedCart.products.indexOf(productToAdd);
+        this.carts[cartIndex].products[productIndex].quantity++
+        await this.saveFile();
+        return true
+    }
+}
+
+module.exports = CartManager;

@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require("express");
+
 class ProductManager {
     static idCreator = 0;
     products;
