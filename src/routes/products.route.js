@@ -2,7 +2,7 @@ const { Router } = require("express");
 const fs = require('fs');
 const route = Router();
 const ProductManager = require("../ProductManager.js");
-const productManager = new ProductManager("./data/products.json");
+const productManager = new ProductManager("./src/data/products.json");
 const uploader = require("../utils");
 const path = require('path');
 
