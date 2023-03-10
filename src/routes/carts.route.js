@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const route = Router();
 const CartManager = require('../CartManager.js');
-const cartManager = new CartManager('./carts.json');
+const cartManager = new CartManager('./src/data/carts.json');
 
 route.post("/", async (req, res) => {
     const response = await cartManager.addCart();
@@ -15,9 +15,9 @@ route.get("/:cid", async (req, res) => {
     const carts = await cartManager.getCarts();
     const cid = carts.find((cart) => cart.id === id);
     if (cid) {
-        res.send(cid);
+        res.status(200).send(cid);
     } else {
-        res.send({error: "Cart ID not found"});
+        res.status(404).send({error: "Cart ID not found"});
     }
 });
 

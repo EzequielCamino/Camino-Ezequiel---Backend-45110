@@ -6,12 +6,7 @@ class CartManager {
     carts;
     constructor(path) {
         this.path = path;
-        (async ()=> {try {
-            const file = await this.loadFile();
-        } catch {
-            throw new Error(error);
-        }
-    })}
+    }
     async loadFile(){
         try {
             const cartsLoad = await fs.promises.readFile(this.path);

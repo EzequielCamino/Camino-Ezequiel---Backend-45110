@@ -6,12 +6,7 @@ class ProductManager {
     products;
     constructor(path) {
         this.path = path;
-        (async ()=> {try {
-            const file = await this.loadFile();
-        } catch {
-            throw new Error(error);
-        }
-    })}
+    }
     async loadFile(){
         try {
             const productsLoad = await fs.promises.readFile(this.path);

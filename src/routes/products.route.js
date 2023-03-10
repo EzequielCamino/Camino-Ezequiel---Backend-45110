@@ -2,7 +2,7 @@ const { Router } = require("express");
 const fs = require('fs');
 const route = Router();
 const ProductManager = require("../ProductManager.js");
-const productManager = new ProductManager("./products.json");
+const productManager = new ProductManager("./src/data/products.json");
 const uploader = require("../utils");
 const path = require('path');
 
@@ -26,9 +26,9 @@ route.get("/", async (req, res) => {
     const limit = req.query.limit
     const products = await productManager.getProducts();
     if(limit) {
-        res.send(products.slice(0,limit));
+        res.status(200).send(products.slice(0,limit));
     } else {
-        res.send({ products });
+        res.status(200).send({ products });
     }
 });
 
@@ -37,9 +37,9 @@ route.get("/:pid", async (req, res) => {
     const products = await productManager.getProducts();
     const pid = products.find((product) => product.id === id);
     if (pid) {
-        res.send(pid);
+        res.status(200).send(pid);
     } else {
-        res.send({error: "Product ID not found"});
+        res.status(404).send({error: "Product ID not found"});
     }
 });
 
@@ -74,7 +74,7 @@ route.put("/:pid", async (req, res) => {
     const response = await productManager.updateProduct(id, data);
     response ?
     res.status(201).send({ModificatedProductID: response})
-    :res.status(400).send({error: 'Product not updated. ID not found'});
+    :res.status(404).send({error: 'Product not updated. ID not found'});
 })
 
 route.delete("/:pid", async (req, res) =>{
@@ -87,7 +87,7 @@ route.delete("/:pid", async (req, res) =>{
         } 
         return res.status(201).send({DeletedProductID: response})
     }
-    res.status(400).send({error: 'Product not deleted. ID not found'});
+    res.status(404).send({error: 'Product not deleted. ID not found'});
 })
 
 module.exports = route;

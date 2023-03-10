@@ -1,0 +1,16 @@
+.table {
+    border: 1px solid;
+    width: 100%;
+}
+th {
+    border: 1px solid;
+    color: white;
+    background-color: black;
+}
+td {
+    border: 1px solid;
+    text-align: center;
+}
+tr:hover {
+    background-color: lightgray;
+}
