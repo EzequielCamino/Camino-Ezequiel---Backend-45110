@@ -3,7 +3,6 @@ const route = Router();
 const ProductManager = require("../ProductManager.js");
 const productManager = new ProductManager("./src/data/products.json");
 
-
 route.get('/', async (req, res) => {
     const products = await productManager.getProducts();
     res.render('index', {
