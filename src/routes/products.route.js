@@ -2,9 +2,10 @@ const { Router } = require("express");
 const fs = require('fs');
 const route = Router();
 const ProductManager = require("../ProductManager.js");
-const productManager = new ProductManager("./data/products.json");
+const productManager = new ProductManager("./src/data/products.json");
 const uploader = require("../utils");
 const path = require('path');
+const configureSocket = require("../socket/configure-socket.js")
 
 function validateProduct(product) {
     const validateKeys = ['title', 'description', 'code', 'price', 'status', 'stock', 'category'];
@@ -65,6 +66,7 @@ route.post("/", uploader.array('thumbnails'), async (req, res) => {
         res.status(400).send({error: 'Code assigned'});
         return
     }
+    configureSocket().getSocketServer().emit('productsModified');
     res.status(201).send({AssignedID: response});
 })
 
@@ -72,9 +74,12 @@ route.put("/:pid", async (req, res) => {
     const id = Number(req.params.pid);
     const data= req.body;
     const response = await productManager.updateProduct(id, data);
-    response ?
-    res.status(201).send({ModificatedProductID: response})
-    :res.status(404).send({error: 'Product not updated. ID not found'});
+    if(response) {
+        configureSocket().getSocketServer().emit('productsModified');
+        res.status(201).send({ModificatedProductID: response})
+        return
+    }
+    res.status(404).send({error: 'Product not updated. ID not found'});
 })
 
 route.delete("/:pid", async (req, res) =>{
@@ -85,6 +90,7 @@ route.delete("/:pid", async (req, res) =>{
         if(imgExists.thumbnails){
             deleteFiles(imgExists.thumbnails)
         } 
+        configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: response})
     }
     res.status(404).send({error: 'Product not deleted. ID not found'});
