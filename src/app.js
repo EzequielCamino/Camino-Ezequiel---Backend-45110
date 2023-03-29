@@ -1,31 +1,39 @@
 const express = require("express");
 const app = express();
-const port = 8080;
+const mongoose = require("mongoose");
+const { PORT, MONGO_URL } = require("../data.js") 
+const handlebars = require('express-handlebars');
 const productsRoute = require('./routes/products.route.js')
 const cartsRoute = require('./routes/carts.route.js')
 const viewsRoute = require("./routes/views.route.js")
-const handlebars = require('express-handlebars');
-const configureSocket = require("./socket/configure-socket.js")
+const configureSocket = require("./socket/configure-socket.js");
 
+/* MONGOOSE */
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
-app.use(express.static(__dirname + '/public'));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+/* HANDLEBARS */
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname+'/views');
 app.set('view engine', 'handlebars');
 
+
+/* MIDDLEWARES */
+app.use(express.static(__dirname + '/public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* ROUTES */
 app.use('/', viewsRoute);
-
 app.use('/api/products', productsRoute);
-
 app.use('/api/carts', cartsRoute);
 
-const httpServer = app.listen(port, () => {
-    console.log(`Servidor levantado en el puerto ${port}`);
+/* WEBSOCKET & LISTEN */
+const httpServer = app.listen(PORT, () => {
+    console.log(`Servidor levantado en el puerto ${PORT}`);
 });
-
 configureSocket(httpServer);
 const socketServer = configureSocket().getSocketServer();
 socketServer.on('connection', (socket) => {

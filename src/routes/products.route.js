@@ -1,20 +1,10 @@
 const { Router } = require("express");
 const fs = require('fs');
 const route = Router();
-const ProductManager = require("../ProductManager.js");
-const productManager = new ProductManager("./src/data/products.json");
+const productManager = require("../dao/product.manager.js")
 const uploader = require("../utils");
 const path = require('path');
 const configureSocket = require("../socket/configure-socket.js")
-
-function validateProduct(product) {
-    const validateKeys = ['title', 'description', 'code', 'price', 'status', 'stock', 'category'];
-    const productKeys = Object.keys(product);
-    return (
-        validateKeys.every((key) => productKeys.includes(key)) &&
-        productKeys.every((key) => validateKeys.includes(key))
-      );
-}
 
 function deleteFiles(files){
     files.forEach(element => {            
@@ -24,76 +14,66 @@ function deleteFiles(files){
 }
 
 route.get("/", async (req, res) => {
-    const limit = req.query.limit
-    const products = await productManager.getProducts();
-    if(limit) {
-        res.status(200).send(products.slice(0,limit));
-    } else {
-        res.status(200).send({ products });
+    try {
+        const products = await productManager.getAll();
+        res.status(200).send({products});
+    } catch (error) {
+        res.status(500).send(error);
     }
 });
 
 route.get("/:pid", async (req, res) => {
-    const id = Number(req.params.pid);
-    const products = await productManager.getProducts();
-    const pid = products.find((product) => product.id === id);
-    if (pid) {
-        res.status(200).send(pid);
-    } else {
+    const id = req.params.pid;
+    try {
+        const product = await productManager.findById(id);
+        if (!product) {
+            res.status(404).send({error: "Product ID not found"});
+            return;
+        }
+        res.status(200).send({product});
+    } catch (error) {
         res.status(404).send({error: "Product ID not found"});
     }
 });
 
 route.post("/", uploader.array('thumbnails'), async (req, res) => {
-    if(!req.body.status){
-        req.body.status = true;
-    }
-    const productBody = req.body;
-    const productFiles = req.files;
-    const validate = validateProduct(productBody)
-    if(!validate){
-        if (req.files){
-            deleteFiles(req.files);
-            console.log('files were deleted');
-        }
-        res.status(400).send({error: 'Invalid data'});
-        return
-    }
-    const product = {title: productBody.title, description: productBody.description, code: productBody.code, price: Number(productBody.price), status: Boolean(productBody.status), stock: Number(productBody.stock), category: productBody.category, thumbnails: productFiles}
-    const response = await productManager.addProduct(product);
-    if(!response){
+    try {
+        const productBody = req.body;
+        const productFiles = req.files;
+        const newProduct = await productManager.create(productBody, productFiles);
+        configureSocket().getSocketServer().emit('productsModified');
+        res.status(201).send({id: newProduct._id});
+    } catch (error) {
         deleteFiles(req.files);
-        res.status(400).send({error: 'Code assigned'});
-        return
+        res.status(400).send({error: "Invalid product format or assigned code"})
     }
-    configureSocket().getSocketServer().emit('productsModified');
-    res.status(201).send({AssignedID: response});
 })
 
 route.put("/:pid", async (req, res) => {
-    const id = Number(req.params.pid);
-    const data= req.body;
-    const response = await productManager.updateProduct(id, data);
-    if(response) {
+    try {
+        const id = req.params.pid;
+        const data= req.body;
+        await productManager.findByIdAndUpdate(id, data);
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({ModificatedProductID: response})
-        return
+    } catch (error) {
+        res.status(404).send({error: 'Product not updated. ID not found'})
     }
-    res.status(404).send({error: 'Product not updated. ID not found'});
 })
 
 route.delete("/:pid", async (req, res) =>{
-    const pid = Number(req.params.pid);
-    const imgExists = await productManager.getProductById(pid);
-    const response = await productManager.deleteProduct(pid);
-    if(response){
+    try {
+        const pid = req.params.pid;
+        await productManager.findByIdAndDelete(id);
+        const imgExists = await productManager.findById(pid);
         if(imgExists.thumbnails){
             deleteFiles(imgExists.thumbnails)
         } 
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: response})
-    }
-    res.status(404).send({error: 'Product not deleted. ID not found'});
+    } catch (error) {
+        res.status(404).send({error: 'Product not deleted. ID not found'});
+    }  
 })
 
 module.exports = route;

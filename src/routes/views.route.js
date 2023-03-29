@@ -1,10 +1,9 @@
 const { Router } = require("express");
 const route = Router();
-const ProductManager = require("../ProductManager.js");
-const productManager = new ProductManager("./src/data/products.json");
+const productManager = require("../dao/product.manager.js")
 
 route.get('/', async (req, res) => {
-    const products = await productManager.getProducts();
+    const products = await productManager.getAll();
     res.render('index', {
         title: "Backend 45110",
         style: "style",
@@ -13,7 +12,7 @@ route.get('/', async (req, res) => {
 });
 
 route.get('/realtimeproducts', async (req, res) => {
-    const products = await productManager.getProducts();
+    const products = await productManager.getAll();
     res.render('realTimeProducts', {
         title: "Backend 45110",
         style: "style",
