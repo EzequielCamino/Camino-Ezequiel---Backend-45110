@@ -20,4 +20,8 @@ route.get('/realtimeproducts', async (req, res) => {
     })
 })
 
+route.get('/chat', (req, res) => {
+    res.render('message');
+});
+
 module.exports = route;

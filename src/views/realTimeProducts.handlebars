@@ -15,7 +15,7 @@
         <tbody>
             {{#each products}}
             <tr>
-                <td>{{this.id}}</td>
+                <td>{{this._id}}</td>
                 <td>{{this.title}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.code}}</td>
@@ -25,7 +25,7 @@
                 <td>{{this.category}}</td>
                 <td>
                     {{#each this.thumbnails}}
-                    <img src="./img/{{this.originalname}}" alt="" style="height: 200px">
+                    <img src="./img/{{this}}" alt="" style="height: 200px">
                     {{/each}}
                 </td>
             </tr>

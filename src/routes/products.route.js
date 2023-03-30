@@ -8,8 +8,7 @@ const configureSocket = require("../socket/configure-socket.js")
 
 function deleteFiles(files){
     files.forEach(element => {            
-        const filePath = element.filename;
-        fs.unlinkSync(path.join(__dirname, "..", '/public/img', filePath));
+        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));
     });
 }
 
@@ -38,9 +37,10 @@ route.get("/:pid", async (req, res) => {
 
 route.post("/", uploader.array('thumbnails'), async (req, res) => {
     try {
-        const productBody = req.body;
-        const productFiles = req.files;
-        const newProduct = await productManager.create(productBody, productFiles);
+        const product = req.body;
+        const files = req.files;
+        product.thumbnails = await files.map(f=> f.originalname)
+        const newProduct = await productManager.create(product);
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({id: newProduct._id});
     } catch (error) {
@@ -64,11 +64,11 @@ route.put("/:pid", async (req, res) => {
 route.delete("/:pid", async (req, res) =>{
     try {
         const pid = req.params.pid;
-        await productManager.findByIdAndDelete(id);
         const imgExists = await productManager.findById(pid);
         if(imgExists.thumbnails){
             deleteFiles(imgExists.thumbnails)
-        } 
+        }            
+        await productManager.findByIdAndDelete(pid);
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: response})
     } catch (error) {

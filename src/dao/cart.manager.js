@@ -15,12 +15,9 @@ class CartManager {
     async findById(id){
         return this.#persistence.findById(id);
     }
-/*     async findByIdAndUpdate(id, data){
+    async findByIdAndUpdate(id, data){
         return this.#persistence.findByIdAndUpdate(id,data);
     }
-    async findByIdAndDelete(id){
-        return this.#persistence.findByIdAndDelete(id);
-    } */
     async addProductToCart(cid, pid) {
         const selectedCart = await this.#persistence.findById(cid);
         if(!selectedCart){
@@ -32,10 +29,10 @@ class CartManager {
             selectedCart.products.push(newProduct);
             return this.#persistence.findByIdAndUpdate(cid,selectedCart);
         }
-        const cartIndex = carts.indexOf(selectedCart);
-        const productIndex = selectedCart.products.indexOf(productToAdd);
-        const newQty = carts[cartIndex].products[productIndex].quantity++
-        return this.#persistence.findByIdAndUpdate(cid,{quantity: newQty});
+        productToAdd.quantity++
+        selectedCart.products.push(productToAdd);
+        selectedCart.products.splice(0, 1);
+        return this.#persistence.findByIdAndUpdate(cid,selectedCart);
     }
 }
 const instance = new CartManager(new MongoManager(cartModel));

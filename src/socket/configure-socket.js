@@ -1,4 +1,5 @@
 const { Server } = require('socket.io')
+const messageManager = require("../dao/messages.manager.js");
 
 class SocketManager {
   #io;
@@ -14,17 +15,13 @@ class SocketManager {
 
   #configureSocket(socket) {
     let credencial = `socket-${socket.id}`;
-    this.#sockets.push({ socket, credencial });
-    socket.on('mensaje', (data) => {
-      console.log({
-        credencial,
-        mensaje: data,
-      });
-      this.#io.emit('mensaje_recibido', {
-        credencial,
-        mensaje: data,
-      });
-    });
+    this.#sockets.push({ socket, credencial })
+    let messages = [];
+    socket.on('message', data =>{
+      messages.push(data);
+      messageManager.create(data);
+      this.#io.emit('messageLogs', messages)
+    })
   }
 
   getSocketServer() {

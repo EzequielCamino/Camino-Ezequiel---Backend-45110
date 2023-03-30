@@ -1,5 +1,5 @@
 const MongoManager = require("./mongo.manager.js");
-const messagesModel = require("./models/chat/messages.model.js");
+const messagesModel = require("./models/messages.model.js");
 
 class MessagesManager {
   #persistence;
