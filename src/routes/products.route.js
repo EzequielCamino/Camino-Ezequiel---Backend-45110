@@ -75,7 +75,7 @@ route.delete("/:pid", async (req, res) =>{
     } catch (error) {
         console.log(error);
         res.status(404).send({error: 'Product not deleted. ID not found'});
-    }  
+    }
 })
 
 module.exports = route;

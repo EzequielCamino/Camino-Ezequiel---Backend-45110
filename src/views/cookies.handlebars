@@ -1,7 +1,10 @@
-<input type="text" id="user" placeholder="user">
-<br>
-<input type="text" id="userEmail" placeholder="userEmail">
-<br>
-<button onclick="getCookie()">getCookie</button>
-<button onclick="setCookie()">submit</button>
+<form onsubmit="setCookie(event)">
+    <input id="user" placeholder="enter your user">
+    <br>
+    <input id="userEmail" placeholder="enter your userEmail">
+    <br>
+    <input type="submit" value="submit">
+    <button onclick="getCookie()">getCookie</button>
+</form>
+
 <script src="js/cookies.js"></script>

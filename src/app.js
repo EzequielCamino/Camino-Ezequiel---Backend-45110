@@ -6,6 +6,7 @@ const handlebars = require('express-handlebars');
 const productsRoute = require('./routes/products.route.js')
 const cartsRoute = require('./routes/carts.route.js')
 const viewsRoute = require("./routes/views.route.js")
+const cookiesRoute = require("./routes/cookies.route.js")
 const configureSocket = require("./socket/configure-socket.js");
 const cookieParser = require("cookie-parser");
 
@@ -22,15 +23,16 @@ app.set('view engine', 'handlebars');
 
 
 /* MIDDLEWARES */
+app.use(cookieParser())
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
 
 /* ROUTES */
 app.use('/', viewsRoute);
 app.use('/api/products', productsRoute);
 app.use('/api/carts', cartsRoute);
+app.use('/cookies', cookiesRoute);
 
 /* WEBSOCKET & LISTEN */
 const httpServer = app.listen(PORT, () => {

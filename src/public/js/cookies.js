@@ -1,18 +1,20 @@
-const { Router } = require("express");
-const route = Router();
+async function setCookie(event) {
+    event.preventDefault();
+    const user = document.getElementById('user').value;
+    const userEmail = document.getElementById('userEmail').value;
+    await fetch('/cookies/setcookie', {
+      method: 'POST',
+      body: JSON.stringify({
+        user, userEmail
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
 
-function getCookie(){
-    route.get('/', (req,res) =>{
-        const cookies = req.cookies
-        console.log(cookies);
-        res.send(cookies);
-    })
-}
-
-function setCookie() {
-    const user = document.getElementById('user');
-    const userEmail = document.getElementById('userEmail');
-    route.post('/', (req,res) => {
-        res.cookie('MyCookie', {user: userEmail}, {maxAge: 10000}).send("Cookie")
+async function getCookie(){
+    await fetch('/cookies/getcookie', {
+        method: 'GET',
     })
 }
