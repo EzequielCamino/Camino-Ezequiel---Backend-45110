@@ -24,4 +24,8 @@ route.get('/chat', (req, res) => {
     res.render('message');
 });
 
+route.get('/cookies', (req, res) =>{
+    res.render('cookies');
+})
+
 module.exports = route;

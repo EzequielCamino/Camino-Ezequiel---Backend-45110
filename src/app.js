@@ -7,6 +7,7 @@ const productsRoute = require('./routes/products.route.js')
 const cartsRoute = require('./routes/carts.route.js')
 const viewsRoute = require("./routes/views.route.js")
 const configureSocket = require("./socket/configure-socket.js");
+const cookieParser = require("cookie-parser");
 
 /* MONGOOSE */
 mongoose.connect(MONGO_URL, {
@@ -24,6 +25,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 /* ROUTES */
 app.use('/', viewsRoute);

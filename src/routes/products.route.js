@@ -55,8 +55,9 @@ route.put("/:pid", async (req, res) => {
         const data= req.body;
         await productManager.findByIdAndUpdate(id, data);
         configureSocket().getSocketServer().emit('productsModified');
-        res.status(201).send({ModificatedProductID: response})
+        res.status(201).send({ModificatedProductID: id})
     } catch (error) {
+        console.log(error);
         res.status(404).send({error: 'Product not updated. ID not found'})
     }
 })
@@ -70,8 +71,9 @@ route.delete("/:pid", async (req, res) =>{
         }            
         await productManager.findByIdAndDelete(pid);
         configureSocket().getSocketServer().emit('productsModified');
-        return res.status(201).send({DeletedProductID: response})
+        return res.status(201).send({DeletedProductID: pid})
     } catch (error) {
+        console.log(error);
         res.status(404).send({error: 'Product not deleted. ID not found'});
     }  
 })
