@@ -1,0 +1,76 @@
+{{#if badPagination }}
+<div>
+    <h1>La página actual no contiene productos o es inválida.</h1>
+    <h1>Pruebe con una página entre 1 y {{pages}}</h1>
+</div>
+{{else}}
+{{#if products }}
+<div>
+    <table class="table">
+        <thead>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Stock</th>
+            <th>Category</th>
+            <th>Thumbnails</th>
+            <th>¡Buy it!</th>
+        </thead>
+        <tbody>
+            {{#each products}}
+            <tr>
+                <td>{{this._id}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.status}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.category}}</td>
+                <td>
+                    {{#each this.thumbnails}}
+                    <img src="./img/{{this}}" alt="" style="height: 200px">
+                    {{/each}}
+                </td>
+                <td><button onclick="addProduct('{{this._id}}')">Add product to cart</button></td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total de paginas</td>
+                <td>{{pages}}</td>
+            </tr>
+            <tr>
+                <td>Pagina actual</td>
+                <td>{{page}}</td>
+            </tr>
+            <tr>
+                {{#if hasPrevPage}}
+                <td><button onclick="setPrev()">Previous page</button></td>
+                {{/if}}
+                {{#if hasNextPage}}
+                <td><button onclick="setNext()">Next page</button></td>
+                {{/if}}
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{{else}}
+{{#if badPagination }}
+<div>
+    <h1>La página actual no contiene productos o es inválida.</h1>
+    <h1>Pruebe con una página entre 1 y {{pages}}</h1>
+</div>
+{{else}}
+<div>
+    <h1>Aún no hay productos cargados</h1>
+</div>
+{{/if}}
+{{/if}}
+{{/if}}
+
+<script src="js/index.js"></script>

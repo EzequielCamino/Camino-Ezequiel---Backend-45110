@@ -2,9 +2,10 @@ const { Router } = require("express");
 const fs = require('fs');
 const route = Router();
 const productManager = require("../dao/product.manager.js")
+const productsModel = require("../dao/models/product.model.js");
 const uploader = require("../utils");
 const path = require('path');
-const configureSocket = require("../socket/configure-socket.js")
+const configureSocket = require("../socket/configure-socket.js");
 
 function deleteFiles(files){
     files.forEach(element => {            
@@ -14,9 +15,33 @@ function deleteFiles(files){
 
 route.get("/", async (req, res) => {
     try {
-        const products = await productManager.getAll();
-        res.status(200).send({products});
+        const query = req.query;
+        const page = query.page ?? 1
+        const products = await productsModel.paginate(
+            {},
+            { 
+            page: page,
+            limit: query.limit ?? 10,
+            lean: true,
+            sort: (query.sort === "asc" || query.sort === "desc") ? {price: query.sort} : 0,
+            }
+        );
+        const badPagination = query.page && (isNaN(query.page) || products.page > products.totalPages || query.page < 1)
+        badPagination ? res.status(400).send({status: "error"})
+        : res.status(200).send({
+            status: "success",
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage,
+            nextPage: products.nextPage,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `http://localhost:8080/products?page=${page-1}` : null,
+            nextLink: products.hasNextPage ? `http://localhost:8080/products?page=${page+1}` : null
+        });
     } catch (error) {
+        console.log(error)
         res.status(500).send(error);
     }
 });
