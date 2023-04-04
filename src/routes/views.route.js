@@ -2,6 +2,7 @@ const { Router } = require("express");
 const route = Router();
 const productManager = require("../dao/product.manager.js")
 const productsModel = require("../dao/models/product.model.js");
+const cartModel = require("../dao/models/cart.model.js")
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
@@ -22,18 +23,18 @@ route.get('/realtimeproducts', async (req, res) => {
 })
 
 route.get('/products', async (req,res)=>{
-    const query = req.query;
+    const { page, limit, sort, ...query } = req.query;
     const products = await productsModel.paginate(
-        {},
-        {page: query.page ?? 1,
-        limit: query.limit ?? 10,
+        query,
+        {page: page ?? 1,
+        limit: limit ?? 10,
         lean: true,
-        sort: (query.sort === "asc" || query.sort === "desc") ? {price: query.sort} : 0,
+        sort: (sort === "asc" || sort === "desc") ? {price: sort} : 0,
         }
     );
-    const badPagination = query.page && (isNaN(query.page) || products.page > products.totalPages || query.page < 1)
+    const badPagination = page && (isNaN(page) || products.page > products.totalPages || page < 1)
     res.render('products', {
-        title: "Backend 45110",
+        title: "Backend 45110 - Products",
         style: "style",
         products: products.docs,
         pages: products.totalPages,
@@ -52,6 +53,25 @@ route.get('/chat', (req, res) => {
 
 route.get('/cookies', (req, res) =>{
     res.render('cookies');
+})
+
+route.get('/carts/:cid', async (req,res)=>{
+    try {
+        const id = req.params.cid;
+        const cartData = await cartModel.findById(id).populate('products.product');
+        const cart = JSON.stringify(cartData);
+        res.render('carts', {
+            title: "Backend 45110 - Cart",
+            style: "style",
+            cart: JSON.parse(cart)
+        })
+    } catch (error) {
+        res.render('carts', {
+            title: "Backend 45110 - Cart",
+            style: "style",
+            cart: false
+        })
+    }
 })
 
 module.exports = route;

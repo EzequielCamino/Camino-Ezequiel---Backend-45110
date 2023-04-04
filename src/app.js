@@ -16,17 +16,16 @@ mongoose.connect(MONGO_URL, {
     useUnifiedTopology: true
 });
 
-/* HANDLEBARS */
-app.engine('handlebars', handlebars.engine());
-app.set('views', __dirname+'/views');
-app.set('view engine', 'handlebars');
-
-
 /* MIDDLEWARES */
 app.use(cookieParser())
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+/* HANDLEBARS */
+app.engine('handlebars', handlebars.engine());
+app.set('views', __dirname+'/views');
+app.set('view engine', 'handlebars');
 
 /* ROUTES */
 app.use('/', viewsRoute);

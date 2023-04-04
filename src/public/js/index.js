@@ -9,6 +9,13 @@ function setNext(){
     query.set('page', nextPage);
     window.location.search = query.toString();
 }
-function addProduct(id){
+async function addProduct(id){
     console.log(id);
+/*     const response = await fetch('/api/carts/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+          },
+    });
+    console.log(response) */
 }

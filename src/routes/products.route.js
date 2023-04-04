@@ -15,18 +15,16 @@ function deleteFiles(files){
 
 route.get("/", async (req, res) => {
     try {
-        const query = req.query;
-        const page = query.page ?? 1
+        const { page, limit, sort, ...query } = req.query;
         const products = await productsModel.paginate(
-            {},
-            { 
-            page: page,
-            limit: query.limit ?? 10,
+            query,
+            {page: page ?? 1,
+            limit: limit ?? 10,
             lean: true,
-            sort: (query.sort === "asc" || query.sort === "desc") ? {price: query.sort} : 0,
+            sort: (sort === "asc" || sort === "desc") ? {price: sort} : 0,
             }
         );
-        const badPagination = query.page && (isNaN(query.page) || products.page > products.totalPages || query.page < 1)
+        const badPagination = page && (isNaN(page) || products.page > products.totalPages || page < 1)
         badPagination ? res.status(400).send({status: "error"})
         : res.status(200).send({
             status: "success",
@@ -82,7 +80,6 @@ route.put("/:pid", async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({ModificatedProductID: id})
     } catch (error) {
-        console.log(error);
         res.status(404).send({error: 'Product not updated. ID not found'})
     }
 })
@@ -98,7 +95,6 @@ route.delete("/:pid", async (req, res) =>{
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: pid})
     } catch (error) {
-        console.log(error);
         res.status(404).send({error: 'Product not deleted. ID not found'});
     }
 })

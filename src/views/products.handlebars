@@ -32,7 +32,7 @@
                 <td>{{this.category}}</td>
                 <td>
                     {{#each this.thumbnails}}
-                    <img src="./img/{{this}}" alt="" style="height: 200px">
+                    <img src="../img/{{this}}" style="height: 200px">
                     {{/each}}
                 </td>
                 <td><button onclick="addProduct('{{this._id}}')">Add product to cart</button></td>
@@ -68,6 +68,7 @@
 {{else}}
 <div>
     <h1>Aún no hay productos cargados</h1>
+    <h1>o ninguno coincide con el criterio de búsqueda</h1>
 </div>
 {{/if}}
 {{/if}}
