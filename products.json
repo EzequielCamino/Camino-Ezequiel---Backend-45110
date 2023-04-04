@@ -1,0 +1,181 @@
+[{
+  "_id": {
+    "$oid": "642a1899e03d0a146ec07be3"
+  },
+  "title": "Nike SB Dunk Low Pro ACG Terra Red Plum",
+  "description": "The Nike Dunk SB Low Pro ACG Terra Red Plum combines a Red Plum and Black-Taxi-Citron color scheme.",
+  "code": "BQ6817-501",
+  "price": 220,
+  "status": true,
+  "stock": 5,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img1.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a18fee03d0a146ec07be6"
+  },
+  "title": "Jordan 1 Mid White Black Racer Blue",
+  "description": "The Jordan 1 Mid White Black Royal features a white and black leather upper with Royal collars and Swooshes. From there, a white and black sole completes the design.",
+  "code": "554724-140",
+  "price": 200,
+  "status": true,
+  "stock": 4,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img2.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a19a2e03d0a146ec07be9"
+  },
+  "title": "Nike SB Dunk Low Navy Black Gum",
+  "description": "Manufactured with ‘Midnight Navy’ suede uppers and black, tumbled leather Swooshes on the side panels, the Nike SB Dunk ‘Navy Gum’ is accented by a blast of orange labelling on the tongues and vintage gum rubber outsoles.",
+  "code": "CW7463-401",
+  "price": 300,
+  "status": true,
+  "stock": 2,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img3.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1a4ee03d0a146ec07bec"
+  },
+  "title": "Adidas Forum 84 High\nOrbit Grey",
+  "description": "The legend is back. Sneakers that ran through the basketball court in the 1980s and made history on the streets. Let's start running. The preparation is completed. Wearing this high-cut adidas forum, you will feel the basketball DNA grow with each step. Designed with iconic ankle straps, cross details and fine leather, it's packed with all the classic bash elements. Let's wear it like yourself.",
+  "code": "FY4576",
+  "price": 180,
+  "status": true,
+  "stock": 3,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img4.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1aa8e03d0a146ec07bef"
+  },
+  "title": "Jordan 1 Retro High OG\nBrotherhood",
+  "description": "Drawing inspiration from the Omega Psi Phi crest, the Air Jordan 1 High Brotherhood arrives with a vibrant University Gold, purple, and white leather construction. Its color blocking is simple and bold, similar to past Jordan 1 releases like the Shattered Backboards and Bred Toes. In retro fashion, a woven Nike tongue label and Wings logo at the collar complete the design.",
+  "code": "555088-706",
+  "price": 180,
+  "status": true,
+  "stock": 7,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img5.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1b03e03d0a146ec07bf2"
+  },
+  "title": "Jordan 1 Low Dark Teal",
+  "description": "Some of the highlights of the Air Jordan 1 Low Dark Teal include vibrant white and black soles that highlight the dark teal and black accents you find on the shoe. The tongue and laces are a stunning black, as is the Swoosh that is a staple of any Nike shoe. On the back of the shoe, you will find the white stenciling of the Air Jordan logo.",
+  "code": "553558-411",
+  "price": 250,
+  "status": true,
+  "stock": 4,
+  "category": "Sneakers",
+  "thumbnails": [
+    "img6.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1b9ae03d0a146ec07bf5"
+  },
+  "title": "Fear of God Essentials Pullover Hoodie Applique Logo",
+  "description": "This olive colorway of the extremely popular Fear Of God Essentials hoodie expands the brand's earth-tone color palette to yet another shade. The hoodie features Fear Of God Essentials branding on the chest and left sleeve of the garment.",
+  "code": "FW20 OLIVE/KHAKI",
+  "price": 200,
+  "status": true,
+  "stock": 6,
+  "category": "Clothes",
+  "thumbnails": [
+    "img7.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1c48e03d0a146ec07bf8"
+  },
+  "title": "Anti Social Social Club Kkoch Hoodie",
+  "description": "The hoodie features Anti Social Social Club’s unmissable logo beneath a growth of flowers and two butterflies on the back of the garment. This hoodie does an excellent job capturing the sensitive yet unapproachable spirit of Anti Social Social Club.",
+  "code": "SS20 BLACK",
+  "price": 190,
+  "status": true,
+  "stock": 3,
+  "category": "Clothes",
+  "thumbnails": [
+    "img8.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1ccbe03d0a146ec07bfb"
+  },
+  "title": "THE NORTH FACE Salty Dog Beanie",
+  "description": "From pre-dawn starts to sundown sessions, our classic Logo Box Cuffed Beanie will keep you warm. The acrylic yarn is resilient yet surprisingly soft, so it won't stretch out of shape or leave you scratching your head.",
+  "code": "3FJX",
+  "price": 80,
+  "status": true,
+  "stock": 2,
+  "category": "Clothes",
+  "thumbnails": [
+    "img9.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1d78e03d0a146ec07bfe"
+  },
+  "title": "Carhartt mens Beanie",
+  "description": "The Acrylic Watch Hat is one of Carhartt WIP’s staple pieces, created in a warm Acrylic fabric with a stretchy rib knit that ensures comfort and a fit suitable for everyone. Features a woven Carhartt WIP (work in progress) label on the front.",
+  "code": "Carhartt WIP Heather Grey",
+  "price": 60,
+  "status": true,
+  "stock": 2,
+  "category": "Clothes",
+  "thumbnails": [
+    "img10.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642a1dd5e03d0a146ec07c01"
+  },
+  "title": "Stussy Helvetica Crew Socks",
+  "description": "Mid-length rib crew socks with Stüssy Helvetica jacquard logo.",
+  "code": "307660",
+  "price": 50,
+  "status": true,
+  "stock": 3,
+  "category": "Clothes",
+  "thumbnails": [
+    "img11.jpg"
+  ],
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "642b5b38f955cc4674bf45d9"
+  },
+  "title": "Drew House White Face Socks",
+  "description": "Lightweight, soft cotton-blend for all-day comfort. Medium cushioning throughout foot for all day comfort. Ribbed construction provides added stretch and comfort",
+  "code": "socks-529-drew82714",
+  "price": 50,
+  "status": true,
+  "stock": 6,
+  "category": "Clothes",
+  "thumbnails": [
+    "img12.jpg"
+  ],
+  "__v": 0
+}]
