@@ -1,14 +1,17 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { PORT, MONGO_URL } = require("../data.js") 
+const { PORT, MONGO_URL } = require("../data.js");
 const handlebars = require('express-handlebars');
-const productsRoute = require('./routes/products.route.js')
-const cartsRoute = require('./routes/carts.route.js')
-const viewsRoute = require("./routes/views.route.js")
-const cookiesRoute = require("./routes/cookies.route.js")
+const productsRoute = require('./routes/products.route.js');
+const cartsRoute = require('./routes/carts.route.js');
+const viewsRoute = require("./routes/views.route.js");
+const cookiesRoute = require("./routes/cookies.route.js");
+const usersRoute = require('./routes/users.router.js');
 const configureSocket = require("./socket/configure-socket.js");
 const cookieParser = require("cookie-parser");
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 /* MONGOOSE */
 mongoose.connect(MONGO_URL, {
@@ -18,6 +21,16 @@ mongoose.connect(MONGO_URL, {
 
 /* MIDDLEWARES */
 app.use(cookieParser())
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: MONGO_URL,
+        mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
+        ttl: 15,
+    }),
+    secret: "coderhouse",
+    resave: true,
+    saveUninitialized: true
+}))
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,7 +44,8 @@ app.set('view engine', 'handlebars');
 app.use('/', viewsRoute);
 app.use('/api/products', productsRoute);
 app.use('/api/carts', cartsRoute);
-app.use('/cookies', cookiesRoute);
+app.use('/api/sessions', cookiesRoute);
+app.use('/api/users', usersRoute);
 
 /* WEBSOCKET & LISTEN */
 const httpServer = app.listen(PORT, () => {

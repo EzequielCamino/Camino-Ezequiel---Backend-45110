@@ -22,7 +22,7 @@ route.get("/:cid", async (req, res) => {
     }
 });
 
-route.post("/:cid/product/:pid", async(req, res) => {
+route.post("/:cid/products/:pid", async(req, res) => {
     try {
         const cid = req.params.cid;
         const pid = req.params.pid;

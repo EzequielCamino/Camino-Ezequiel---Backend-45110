@@ -2,22 +2,45 @@ const { Router } = require("express");
 const route = Router();
 const productManager = require("../dao/product.manager.js")
 const productsModel = require("../dao/models/product.model.js");
-const cartModel = require("../dao/models/cart.model.js")
+const cartModel = require("../dao/models/cart.model.js");
+const usersModel = require("../dao/models/user.model.js");
+const {publicAuth, privateAuth} = require("../utils/auth.js")
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
     res.render('index', {
         title: "Backend 45110",
-        style: "style",
         products
     })
 });
 
+route.get('/api/sessions/register',publicAuth,  async (req,res) => {
+    res.render('register', {
+        title: "Backend 45110 - Register",
+    })
+})
+
+route.get('/api/sessions/login',publicAuth, async (req,res) => {
+    res.render('login', {
+        title: "Backend 45110 - Login",
+    })
+})
+
+route.get('/api/sessions/profile',privateAuth, async (req,res) => {
+    const email = req.session.user;
+    const user = await usersModel.findOne({email})
+    res.render('profile', {
+        name: user.name,
+        lastname: user.lastname,
+        age: user.age,
+        email: user.email
+    })
+})
+
 route.get('/realtimeproducts', async (req, res) => {
     const products = await productManager.getAll();
     res.render('realTimeProducts', {
-        title: "Backend 45110",
-        style: "style",
+        title: "Backend 45110 - Real Time Products",
         products
     })
 })
@@ -35,7 +58,6 @@ route.get('/products', async (req,res)=>{
     const badPagination = page && (isNaN(page) || products.page > products.totalPages || page < 1)
     res.render('products', {
         title: "Backend 45110 - Products",
-        style: "style",
         products: products.docs,
         pages: products.totalPages,
         page: products.page,
@@ -62,13 +84,11 @@ route.get('/carts/:cid', async (req,res)=>{
         const cart = JSON.stringify(cartData);
         res.render('carts', {
             title: "Backend 45110 - Cart",
-            style: "style",
             cart: JSON.parse(cart)
         })
     } catch (error) {
         res.render('carts', {
             title: "Backend 45110 - Cart",
-            style: "style",
             cart: false
         })
     }

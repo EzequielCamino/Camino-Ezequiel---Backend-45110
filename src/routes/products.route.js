@@ -3,7 +3,7 @@ const fs = require('fs');
 const route = Router();
 const productManager = require("../dao/product.manager.js")
 const productsModel = require("../dao/models/product.model.js");
-const uploader = require("../utils");
+const uploader = require("../utils/multer.js");
 const path = require('path');
 const configureSocket = require("../socket/configure-socket.js");
 
