@@ -6,7 +6,7 @@ const { privateAuth } = require("../utils/auth.js");
 route.post('/register', async (req,res) => {
     const user = req.body;
     try {
-        const response = await usersManager.create(user);
+        const response = await usersModel.create(user);
         res.status(200).send(response);
     } catch(error) {
         res.status(500).send({message: error})
