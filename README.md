@@ -8,6 +8,9 @@
 - Multer
 - Socket.io
 - Sweetalert2
+- Connect-mongo
+- Session-file-store
+- Bcrypt _(not needed at this point)_
 - Cookie-parser _(not needed at this point)_
 
 ## Installation
@@ -45,8 +48,12 @@ const data = {
 
 - Products without pagination and querys: [http://localhost:8080/](http://localhost:8080/)
 - RealTimeProducts (with socket connection): [http://localhost:8080/realtimeproducts](http://localhost:8080/realtimeproducts)
-- Products with pagination and querys: [http://localhost:8080/products](http://localhost:8080/products)
+- Products with pagination and querys (has to be logged in): [http://localhost:8080/products](http://localhost:8080/products)
 - Carts (has to be selected by ID): [http://localhost:8080/carts/:cid](http://localhost:8080/carts/:cid)
+- Register (not accesable if logged in): [http://localhost:8080/api/sessions/register](http://localhost:8080/api/sessions/register)
+- Login (not accesable if logged in): [http://localhost:8080/api/sessions/login](http://localhost:8080/api/sessions/login)
+- Profile (has to be logged in): [http://localhost:8080/api/sessions/profile](http://localhost:8080/api/sessions/profile)
+
 #### Other views:
 - Chat with socket: [http://localhost:8080/chat](http://localhost:8080/chat)
 - Cookie test: [http://localhost:8080/cookies](http://localhost:8080/cookies)
