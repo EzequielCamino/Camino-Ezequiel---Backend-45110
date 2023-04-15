@@ -15,12 +15,17 @@ route.post('/register', async (req,res) => {
 
 route.post('/login', async (req, res) => {
     const {email, password} = req.body;
-    const user = await usersModel.findOne({email, password});
-    if (!user) {
-        return res.status(401).send({error: 'wrong mail or password'});
+    if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
+        req.session.role = "admin";
+    } else {
+        const user = await usersModel.findOne({email, password});
+        if (!user) {
+            return res.status(401).send({error: 'wrong mail or password'});
+        }
+        req.session.role = "usuario";
     }
     req.session.user = email;
-    res.redirect('/api/sessions/profile')
+    res.redirect('/products')
 })
 
 route.post('/logout', privateAuth, async (req, res) => {

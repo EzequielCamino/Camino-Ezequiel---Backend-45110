@@ -25,7 +25,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: MONGO_URL,
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
-        ttl: 15,
+        ttl: 15
     }),
     secret: "coderhouse",
     resave: true,

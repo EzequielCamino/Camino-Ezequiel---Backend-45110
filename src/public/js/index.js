@@ -19,3 +19,7 @@ async function addProduct(id){
     });
     console.log(response) */
 }
+
+function logout() {
+    api.post('../../api/users/logout');
+}

@@ -45,7 +45,7 @@ route.get('/realtimeproducts', async (req, res) => {
     })
 })
 
-route.get('/products', async (req,res)=>{
+route.get('/products',privateAuth, async (req,res)=>{
     const { page, limit, sort, ...query } = req.query;
     const products = await productsModel.paginate(
         query,
@@ -56,8 +56,12 @@ route.get('/products', async (req,res)=>{
         }
     );
     const badPagination = page && (isNaN(page) || products.page > products.totalPages || page < 1)
+    const email = req.session.user;
+    const role = req.session.role;
     res.render('products', {
         title: "Backend 45110 - Products",
+        email,
+        role,
         products: products.docs,
         pages: products.totalPages,
         page: products.page,
