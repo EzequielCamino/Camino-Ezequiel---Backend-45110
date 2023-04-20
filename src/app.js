@@ -12,6 +12,8 @@ const configureSocket = require("./socket/configure-socket.js");
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
+const passport = require('passport');
+const initializePassport = require('./utils/passport-config.js');
 
 /* MONGOOSE */
 mongoose.connect(MONGO_URL, {
@@ -31,6 +33,9 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session())
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

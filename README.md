@@ -10,8 +10,10 @@
 - Sweetalert2
 - Connect-mongo
 - Session-file-store
-- Bcrypt _(not needed at this point)_
-- Cookie-parser _(not needed at this point)_
+- Bcrypt
+- Cookie-parser
+- Passport
+- Passport-local
 
 ## Installation
 
@@ -59,5 +61,9 @@ const data = {
 - Cookie test: [http://localhost:8080/cookies](http://localhost:8080/cookies)
 
 ## Notes
+
+- To Login as an admin use the following credentials:
+`Username: adminCoder@coder.com`
+`Password: adminCod3r123` 
 
 - On endpoint [http://localhost:8080/products](http://localhost:8080/products) the button "Add product to cart" doesn't work properly, it only shows the product ID in console ("Create cart" endpoint fetch commented)

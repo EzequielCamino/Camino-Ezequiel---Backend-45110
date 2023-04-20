@@ -9,7 +9,11 @@ const api = {
             window.location.replace(response.url);
         }
         if(response) {
-            return await response.json();
+            try {
+                return await response.json();
+            } catch (error) {
+                return response
+            }
         }
     },
     get: async (url) => {

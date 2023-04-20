@@ -7,7 +7,8 @@ async function login(event) {
         password
     })
     .then((data) => {
-        if(!data._id) {
+        console.log(data)
+        if(data.ok === false) {
             return alert("User not found. Please check username or password")
         }
     })
