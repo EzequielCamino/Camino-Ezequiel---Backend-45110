@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const { PORT, MONGO_URL } = require("../data.js");
+const { PORT, MONGO_URL, COOKIESECRET } = require("../data.js");
 const handlebars = require('express-handlebars');
 const productsRoute = require('./routes/products.route.js');
 const cartsRoute = require('./routes/carts.route.js');
@@ -29,7 +29,7 @@ app.use(session({
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
         ttl: 15
     }),
-    secret: "coderhouse",
+    secret: COOKIESECRET,
     resave: true,
     saveUninitialized: true
 }))

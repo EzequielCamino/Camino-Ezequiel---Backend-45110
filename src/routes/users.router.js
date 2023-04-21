@@ -63,4 +63,12 @@ route.post('/logout', privateAuth, async (req, res) => {
     })
 })
 
+route.get('/github', passport.authenticate('github', {scope: ['user: email']}), async (req, res) =>{})
+
+route.get('/github-callback', passport.authenticate('github', {failureRedirect: '/login'}), async(req, res) =>{
+    req.session.user = req.user;
+    req.session.role = "user";
+    res.redirect('/products');
+})
+
 module.exports = route

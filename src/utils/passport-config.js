@@ -1,9 +1,13 @@
 const passport = require('passport');
 const local = require('passport-local');
+const github = require('passport-github2');
 const usersModel = require('../dao/models/user.model.js');
 const {createHash, validateHash} = require("./bcrypt.js");
+const { githubClientID, githubClientSecret, githubCallbackURL } = require('../../data.js')
 
 const LocalStrategy = local.Strategy;
+const GithubStrategy = github.Strategy;
+
 const initializePassport = () => {
     passport.use('register', new LocalStrategy(
         {passReqToCallback:true, usernameField: 'email'}, async (req, username, password, done) => {
@@ -48,6 +52,32 @@ const initializePassport = () => {
             }
         }
     ));
+
+    passport.use('github', new GithubStrategy({
+        clientID: githubClientID,
+        clientSecret: githubClientSecret,
+        callbackURL: githubCallbackURL
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            const email = profile._json.email;
+            const user = usersModel.findOne({email});
+            if(!user) {
+                const newUser = {
+                    name: profile._json.name,
+                    lastname: '',
+                    age: 0,
+                    email: profile._json.email,
+                    password: ''
+                }
+                const response = await usersModel.create(newUser);
+                return done(null, response);
+            } else {
+                return done(null, user);
+            }
+        } catch (error) {
+            return done(error);
+        }
+    }));
 
     passport.serializeUser((user, done) =>{
         done(null, user._id);
