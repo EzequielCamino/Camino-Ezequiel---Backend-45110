@@ -14,6 +14,7 @@
 - Cookie-parser
 - Passport
 - Passport-local
+- Passport-github2
 
 ## Installation
 
