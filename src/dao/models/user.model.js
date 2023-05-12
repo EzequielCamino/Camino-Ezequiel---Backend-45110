@@ -22,6 +22,20 @@ const usersSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    cart: {
+        type: 
+            {
+                cart:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "carts",
+                }
+            },
+        default: {}
+    },
+    role: {
+        type: String,
+        default: "user"
     }
 });
 

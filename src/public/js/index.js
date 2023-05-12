@@ -21,5 +21,5 @@ async function addProduct(id){
 }
 
 function logout() {
-    api.post('../../api/users/logout');
+    api.post('../../api/sessions/logout');
 }

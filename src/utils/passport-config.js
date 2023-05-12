@@ -1,12 +1,18 @@
 const passport = require('passport');
 const local = require('passport-local');
 const github = require('passport-github2');
+const jwt = require('passport-jwt');
 const usersModel = require('../dao/models/user.model.js');
 const {createHash, validateHash} = require("./bcrypt.js");
-const { githubClientID, githubClientSecret, githubCallbackURL } = require('../../data.js')
+const { githubClientID, githubClientSecret, githubCallbackURL, JWT_TOKEN } = require('../../data.js')
 
 const LocalStrategy = local.Strategy;
 const GithubStrategy = github.Strategy;
+const JwtStrategy = jwt.Strategy;
+
+function cookieExtractor(req){
+    return req?.cookies?.['jwt'];
+}
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy(
@@ -35,7 +41,8 @@ const initializePassport = () => {
                     lastname: "admin",
                     age: 0,
                     email: username,
-                    password: createHash(password)
+                    password: createHash(password),
+                    role: "admin"
                 }
                 const adminUser = await usersModel.findOne({email: username}) ?? await usersModel.create(admin);
                 return done(null, adminUser);
@@ -59,15 +66,17 @@ const initializePassport = () => {
         callbackURL: githubCallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            const email = profile._json.email;
-            const user = usersModel.findOne({email});
+            const email = profile._json.login;
+            const user = await usersModel.findOne({email});
             if(!user) {
                 const newUser = {
-                    name: profile._json.name,
-                    lastname: '',
+                    name: profile._json.login,
+                    lastname: "none",
                     age: 0,
-                    email: profile._json.email,
-                    password: ''
+                    email: profile._json.login,
+                    password: "none",
+                    cart: {},
+                    role: "user"
                 }
                 const response = await usersModel.create(newUser);
                 return done(null, response);
@@ -78,6 +87,19 @@ const initializePassport = () => {
             return done(error);
         }
     }));
+
+    passport.use('jwt', new JwtStrategy({
+        jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
+        secretOrKey: JWT_TOKEN,
+        ignoreExpiration: false
+    },
+    (payload, done) => {
+        try {
+            return done(null, payload);
+        } catch (error) {
+            done(error, null);
+        }
+    }))
 
     passport.serializeUser((user, done) =>{
         done(null, user._id);
