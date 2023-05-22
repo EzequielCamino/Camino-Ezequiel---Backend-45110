@@ -1,7 +1,6 @@
 const fs = require('fs');
-const express = require("express");
 
-class ProductManager {
+class ProductFsService {
     static idCreator = 0;
     products;
     constructor(path) {
@@ -71,7 +70,7 @@ class ProductManager {
     }
 }
 
-module.exports = ProductManager;
+module.exports = ProductFsService;
 
 
 /************* TESTING CODE *************/

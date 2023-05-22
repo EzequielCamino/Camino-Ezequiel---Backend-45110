@@ -1,22 +1,22 @@
 const express = require("express");
+const config = require("./config/config.js")
 const app = express();
 const mongoose = require("mongoose");
-const { PORT, MONGO_URL, COOKIESECRET, SESSION_SECRET } = require("../data.js");
 const handlebars = require('express-handlebars');
-const productsRoute = require('./routes/products.route.js');
-const cartsRoute = require('./routes/carts.route.js');
-const viewsRoute = require("./routes/views.route.js");
-const cookiesRoute = require("./routes/cookies.route.js");
-const usersRoute = require('./routes/users.router.js');
-const configureSocket = require("./socket/configure-socket.js");
+const productsRoute = require('./routers/products.route.js');
+const cartsRoute = require('./routers/carts.route.js');
+const viewsRoute = require("./routers/views.route.js");
+const cookiesRoute = require("./routers/cookies.route.js");
+const usersRoute = require('./routers/user.router.js');
+const configureSocket = require("./config/configure-socket.js");
 const cookieParser = require("cookie-parser");
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
-const initializePassport = require('./utils/passport-config.js');
+const initializePassport = require('./config/passport-config.js');
 
 /* MONGOOSE */
-mongoose.connect(MONGO_URL, {
+mongoose.connect(config.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -25,11 +25,11 @@ mongoose.connect(MONGO_URL, {
 app.use(cookieParser())
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: MONGO_URL,
+        mongoUrl: config.MONGO_URL,
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
         ttl: 15
     }),
-    secret: COOKIESECRET,
+    secret: config.COOKIESECRET,
     resave: true,
     saveUninitialized: true
 }))
@@ -53,8 +53,8 @@ app.use('/api/sessions', usersRoute);
 app.use('/api/cookies', cookiesRoute);
 
 /* WEBSOCKET & LISTEN */
-const httpServer = app.listen(PORT, () => {
-    console.log(`Servidor levantado en el puerto ${PORT}`);
+const httpServer = app.listen(config.PORT, () => {
+    console.log(`Servidor levantado en el puerto ${config.PORT}`);
 });
 configureSocket(httpServer);
 const socketServer = configureSocket().getSocketServer();

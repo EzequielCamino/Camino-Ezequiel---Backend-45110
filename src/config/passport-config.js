@@ -3,9 +3,10 @@ const local = require('passport-local');
 const github = require('passport-github2');
 const jwt = require('passport-jwt');
 const usersModel = require('../dao/models/user.model.js');
-const {createHash, validateHash} = require("./bcrypt.js");
-const { githubClientID, githubClientSecret, githubCallbackURL, JWT_TOKEN } = require('../../data.js')
-
+const {createHash, validateHash} = require("../utils/bcrypt.js");
+const config = require("./config.js")
+/* const { config.githubClientID, config.githubClientSecret, config.githubCallbackURL, config.JWT_TOKEN } = require('../../data.js')
+ */
 const LocalStrategy = local.Strategy;
 const GithubStrategy = github.Strategy;
 const JwtStrategy = jwt.Strategy;
@@ -61,9 +62,9 @@ const initializePassport = () => {
     ));
 
     passport.use('github', new GithubStrategy({
-        clientID: githubClientID,
-        clientSecret: githubClientSecret,
-        callbackURL: githubCallbackURL
+        clientID: config.githubClientID,
+        clientSecret: config.githubClientSecret,
+        callbackURL: config.githubCallbackURL
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             const email = profile._json.login;
@@ -90,7 +91,7 @@ const initializePassport = () => {
 
     passport.use('jwt', new JwtStrategy({
         jwtFromRequest: jwt.ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: JWT_TOKEN,
+        secretOrKey: config.JWT_TOKEN,
         ignoreExpiration: false
     },
     (payload, done) => {

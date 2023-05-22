@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const route = Router();
-const productManager = require("../dao/product.manager.js")
+const productManager = require("../dao/services/product.service.js")
 const productsModel = require("../dao/models/product.model.js");
 const cartModel = require("../dao/models/cart.model.js");
 const usersModel = require("../dao/models/user.model.js");
-const {publicAuth, privateAuth} = require("../utils/auth.js")
+const {publicAuth, privateAuth} = require("../middlewares/auth.js")
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();

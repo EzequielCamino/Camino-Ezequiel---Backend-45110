@@ -1,7 +1,7 @@
-const MongoManager = require("./mongo.manager.js");
-const usersModel = require("./models/user.model.js");
+const MongoService = require("./mongo.service.js");
+const usersModel = require("../models/user.model.js");
 
-class UsersManager {
+class UserService {
     #persistence;
     constructor(persistence){
         this.#persistence = persistence;
@@ -22,6 +22,6 @@ class UsersManager {
         return this.#persistence.findByIdAndDelete(id);
     }
 }
-const instance = new UsersManager(new MongoManager(usersModel));
+const instance = new UserService(new MongoService(usersModel));
 
 module.exports = instance;

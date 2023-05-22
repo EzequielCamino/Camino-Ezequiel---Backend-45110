@@ -1,5 +1,5 @@
 const { Server } = require('socket.io')
-const messageManager = require("../dao/messages.manager.js");
+const messageManager = require("../dao/services/messages.service.js");
 
 class SocketManager {
   #io;

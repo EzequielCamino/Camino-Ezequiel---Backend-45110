@@ -1,7 +1,6 @@
 const fs = require('fs');
-const express = require("express");
 
-class CartManager {
+class CartFsService {
     static idCreator = 1;
     carts;
     constructor(path) {
@@ -57,4 +56,4 @@ class CartManager {
     }
 }
 
-module.exports = CartManager;
+module.exports = CartFsService;

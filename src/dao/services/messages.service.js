@@ -1,7 +1,7 @@
-const MongoManager = require("./mongo.manager.js");
-const messagesModel = require("./models/messages.model.js");
+const MongoService = require("./mongo.service.js");
+const messagesModel = require("../models/messages.model.js");
 
-class MessagesManager {
+class MessagesService {
   #persistence;
   constructor(persistence) {
     this.#persistence = persistence;
@@ -13,6 +13,6 @@ class MessagesManager {
     return this.#persistence.create(chat);
   }
 }
-const instance = new MessagesManager(new MongoManager(messagesModel));
+const instance = new MessagesService(new MongoService(messagesModel));
 
 module.exports = instance;

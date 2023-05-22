@@ -1,4 +1,4 @@
-class MongoManager {
+class MongoService {
     constructor(model){
         this.model = model;
     }
@@ -44,4 +44,4 @@ class MongoManager {
     }
 }
 
-module.exports = MongoManager;
+module.exports = MongoService;
