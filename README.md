@@ -15,6 +15,7 @@
 - Passport
 - Passport-local
 - Passport-github2
+- Passport-jwt
 
 ## Installation
 
@@ -56,6 +57,7 @@ const data = {
 - Register (not accesable if logged in): [http://localhost:8080/api/sessions/register](http://localhost:8080/api/sessions/register)
 - Login (not accesable if logged in): [http://localhost:8080/api/sessions/login](http://localhost:8080/api/sessions/login)
 - Profile (has to be logged in): [http://localhost:8080/api/sessions/profile](http://localhost:8080/api/sessions/profile)
+- Current (looks for JWT token): [http://localhost:8080/api/sessions/current](http://localhost:8080/api/sessions/current)
 
 #### Other views:
 - Chat with socket: [http://localhost:8080/chat](http://localhost:8080/chat)
