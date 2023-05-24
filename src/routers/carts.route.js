@@ -4,7 +4,7 @@ const CartController = require('../controllers/cart.controller.js')
 const { create, getById, addProduct, updateCart, updateProduct, removeCart, removeProduct, purchase } = require('../controllers/cart.controller.js');
 const { userAuth } = require("../middlewares/auth.js")
 
-route.post("/", create.bind(CartController));
+route.post("/", create);
 route.get("/:cid", getById);
 route.post("/:cid/products/:pid", userAuth, addProduct);
 route.delete("/:cid", removeCart);

@@ -54,13 +54,13 @@ All endpoints and their respective routes/bodies can be find here:
 - RealTimeProducts (with socket connection): [http://localhost:8080/realtimeproducts](http://localhost:8080/realtimeproducts)
 - Products with pagination and querys (has to be logged in): [http://localhost:8080/products](http://localhost:8080/products)
 - Carts (has to be selected by ID): [http://localhost:8080/carts/:cid](http://localhost:8080/carts/:cid)
-- Register (not accesable if logged in): [http://localhost:8080/api/sessions/register](http://localhost:8080/api/sessions/register)
-- Login (not accesable if logged in): [http://localhost:8080/api/sessions/login](http://localhost:8080/api/sessions/login)
+- Register (not accesible if logged in): [http://localhost:8080/api/sessions/register](http://localhost:8080/api/sessions/register)
+- Login (not accesible if logged in): [http://localhost:8080/api/sessions/login](http://localhost:8080/api/sessions/login)
 - Profile (has to be logged in): [http://localhost:8080/api/sessions/profile](http://localhost:8080/api/sessions/profile)
 - Current (looks for JWT token): [http://localhost:8080/api/sessions/current](http://localhost:8080/api/sessions/current)
 
 #### Other views:
-- Chat with socket: [http://localhost:8080/chat](http://localhost:8080/chat)
+- Chat with socket (only accesible as an User): [http://localhost:8080/chat](http://localhost:8080/chat)
 - Cookie test: [http://localhost:8080/cookies](http://localhost:8080/cookies)
 
 ## Notes
