@@ -23,7 +23,11 @@ class ProductFsService {
             throw new Error(error);
         }
     }
-    async addProduct(product) {
+    async getAll() {
+        await this.loadFile();
+        return this.products;
+    }
+    async create(product) {
         await this.loadFile()
         if(this.products.find((prod) => prod.code === product.code)) {
             console.log("Code assigned");
@@ -36,16 +40,12 @@ class ProductFsService {
         await this.saveFile();
         return id;
     }
-    async getProducts() {
-        await this.loadFile();
-        return this.products;
-    }
-    async getProductById(id){
+    async findById(id){
         await this.loadFile();
         return this.products.find((product) => product.id === id);
         
     }
-    async updateProduct(id, data){
+    async findByIdAndUpdate(id, data){
         await this.loadFile();
         if(this.products.find((product) => product.id === id)){
             const updatedProduct = this.products.map((product) => product.id == id ? {...product, ...data} : product)
@@ -56,7 +56,7 @@ class ProductFsService {
         return null
         console.warn("Product not updated. ID not found");
     }
-    async deleteProduct(id){
+    async findByIdAndDelete(id){
         await this.loadFile();
         const productFind = await this.products.find((product) => product.id === id)
         const index = await this.products.indexOf(productFind);

@@ -23,11 +23,11 @@ class CartFsService {
             throw new Error(error);
         }
     }
-    async getCarts() {
+    async getAll() {
         await this.loadFile();
         return this.carts;
     }
-    async addCart(){
+    async create(){
         await this.loadFile();
         const newid = CartManager.idCreator++;
         const newCart = {'id': newid, 'products': []};
@@ -35,7 +35,11 @@ class CartFsService {
         await this.saveFile();
         return newCart
     }
-    async addProductToCart(cid, pid) {
+    async findById(id){
+        const selectedCart = this.carts.find((cart)=> cart.id === id);
+        return selectedCart
+    }
+    async findByIdAndUpdate(cid, pid) {
         await this.loadFile();
         const selectedCart = this.carts.find((cart)=> cart.id === cid);
         if(!selectedCart){

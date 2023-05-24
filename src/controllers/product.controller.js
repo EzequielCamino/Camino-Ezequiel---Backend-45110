@@ -1,10 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const uploader = require("../utils/multer.js");
-const ProductService = require("../dao/services/product.service.js");
-const productsModel = require("../dao/models/product.model.js");
+const productsModel = require("../dao/services/mongo/models/product.model.js");
 const configureSocket = require("../config/configure-socket.js");
-
+let ProductService
+const config = require('../config/config.js');
+if(config.PERSISTENCE === "fs") {
+    ProductService = require("../dao/services/fs/product.fs.service.js");
+} else {
+    ProductService = require("../dao/services/mongo/product.service.js");
+}
 
 function deleteFiles(files){
     files.forEach(element => {            

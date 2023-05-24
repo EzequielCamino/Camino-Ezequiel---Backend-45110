@@ -1,5 +1,5 @@
 const MongoService = require("./mongo.service.js");
-const messagesModel = require("../models/messages.model.js");
+const messagesModel = require("./models/messages.model.js");
 
 class MessagesService {
   #persistence;

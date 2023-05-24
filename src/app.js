@@ -16,10 +16,12 @@ const passport = require('passport');
 const initializePassport = require('./config/passport-config.js');
 
 /* MONGOOSE */
-mongoose.connect(config.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+if(config.PERSISTENCE !== "fs"){
+    mongoose.connect(config.MONGO_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }); 
+}
 
 /* MIDDLEWARES */
 app.use(cookieParser())
@@ -27,7 +29,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: config.MONGO_URL,
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
-        ttl: 15
+        ttl: 120
     }),
     secret: config.COOKIESECRET,
     resave: true,
@@ -54,7 +56,7 @@ app.use('/api/cookies', cookiesRoute);
 
 /* WEBSOCKET & LISTEN */
 const httpServer = app.listen(config.PORT, () => {
-    console.log(`Servidor levantado en el puerto ${config.PORT}`);
+    console.log(`Servidor levantado en el puerto ${config.PORT}`, "\n", `Using ${config.PERSISTENCE} persistence model`);
 });
 configureSocket(httpServer);
 const socketServer = configureSocket().getSocketServer();

@@ -1,7 +1,7 @@
 const MongoService = require("./mongo.service.js");
-const productModel = require("../models/product.model.js");
+const cartModel = require("./models/cart.model.js");
 
-class ProductService {
+class CartService {
     #persistence;
     constructor(persistence){
         this.#persistence = persistence;
@@ -9,8 +9,8 @@ class ProductService {
     async getAll() {
         return this.#persistence.getAll();
     }
-    async create(product) {
-        return this.#persistence.create(product);
+    async create() {
+        return this.#persistence.create();
     }
     async findById(id){
         return this.#persistence.findById(id);
@@ -22,6 +22,6 @@ class ProductService {
         return this.#persistence.findByIdAndDelete(id);
     }
 }
-const instance = new ProductService(new MongoService(productModel));
+const instance = new CartService(new MongoService(cartModel));
 
 module.exports = instance;

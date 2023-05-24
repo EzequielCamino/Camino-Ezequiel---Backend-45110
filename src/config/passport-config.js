@@ -2,11 +2,9 @@ const passport = require('passport');
 const local = require('passport-local');
 const github = require('passport-github2');
 const jwt = require('passport-jwt');
-const usersModel = require('../dao/models/user.model.js');
+const usersModel = require('../dao/services/mongo/models/user.model.js');
 const {createHash, validateHash} = require("../utils/bcrypt.js");
 const config = require("./config.js")
-/* const { config.githubClientID, config.githubClientSecret, config.githubCallbackURL, config.JWT_TOKEN } = require('../../data.js')
- */
 const LocalStrategy = local.Strategy;
 const GithubStrategy = github.Strategy;
 const JwtStrategy = jwt.Strategy;

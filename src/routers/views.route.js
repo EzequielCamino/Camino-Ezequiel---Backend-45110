@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const route = Router();
-const productManager = require("../dao/services/product.service.js")
-const productsModel = require("../dao/models/product.model.js");
-const cartModel = require("../dao/models/cart.model.js");
-const usersModel = require("../dao/models/user.model.js");
-const {publicAuth, privateAuth} = require("../middlewares/auth.js")
+const productManager = require("../dao/services/mongo/product.service.js")
+const productsModel = require("../dao/services/mongo/models/product.model.js");
+const cartModel = require("../dao/services/mongo/models/cart.model.js");
+const usersModel = require("../dao/services/mongo/models/user.model.js");
+const {publicAuth, privateAuth, userAuth} = require("../middlewares/auth.js")
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
@@ -14,19 +14,19 @@ route.get('/', async (req, res) => {
     })
 });
 
-route.get('/api/sessions/register',publicAuth,  async (req,res) => {
+route.get('/api/sessions/register', publicAuth,  async (req,res) => {
     res.render('register', {
         title: "Backend 45110 - Register",
     })
 })
 
-route.get('/api/sessions/login',publicAuth, async (req,res) => {
+route.get('/api/sessions/login', publicAuth, async (req,res) => {
     res.render('login', {
         title: "Backend 45110 - Login",
     })
 })
 
-route.get('/api/sessions/profile',privateAuth, async (req,res) => {
+route.get('/api/sessions/profile', privateAuth, async (req,res) => {
     const email = req.session.user;
     const user = await usersModel.findOne({email})
     res.render('profile', {
@@ -73,7 +73,7 @@ route.get('/products',privateAuth, async (req,res)=>{
     });
 })
 
-route.get('/chat', (req, res) => {
+route.get('/chat', userAuth, (req, res) => {
     res.render('message');
 });
 

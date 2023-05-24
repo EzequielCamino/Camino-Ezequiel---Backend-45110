@@ -1,4 +1,4 @@
-const UserService = require("../dao/services/user.service.js");
+const UserService = require("../dao/services/mongo/user.service.js");
 const { generateToken } = require("../utils/jwt.js")
 
 const login = async (req, res) => {
@@ -43,6 +43,7 @@ const githubCallback = async (req, res) => {
 
 const current = async (req, res) => {
     try {
+        delete req.user._id;
         res.send({message: req.user});
     } catch (error) {
         res.send(error)
