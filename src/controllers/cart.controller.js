@@ -18,7 +18,6 @@ const create = async (req, res) => {
         const response = await CartService.create();
         res.status(201).send({message: `Cart successfully created with ID:${response._id}`})
     } catch (error) {
-        console.log(error)
         res.status(500).send({error: 'Cart not created'});
     }
 }
@@ -108,11 +107,7 @@ const removeProduct = async (req, res) => {
 const purchase = async (req, res) => {
     try {
         const id = req.params.cid;
-        const cart = await CartService.findById(id)
-        /* if(!cart){
-            res.status(400).send({error: 'Cart ID not found'});
-            return
-        } */
+        const cart = await CartService.findById(id);
         const buyableCart = [];
         const newCart = [];
         for(item of cart.products){
@@ -136,11 +131,8 @@ const purchase = async (req, res) => {
         await TicketService.create(ticket);
         await sendMail(amount, purchaser);
         let result = await CartService.findByIdAndUpdate(id, {products: newCart})
-        console.log(newCart)
-        console.log(result)
         res.status(200).send({message: 'Purchase completed', NotBuyedProducts: newCart}); 
     } catch (error) {
-        console.log(error)
         res.status(404).send({error: 'Purchase not completed. Cart ID not found'});
     }
 }

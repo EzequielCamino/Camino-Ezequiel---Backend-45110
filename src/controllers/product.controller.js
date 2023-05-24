@@ -46,7 +46,6 @@ const getAll = async (req, res) => {
             nextLink: products.hasNextPage ? `http://localhost:8080/products?page=${page+1}` : null
         });
     } catch (error) {
-        console.log(error)
         res.status(500).send(error);
     }
 }
