@@ -35,7 +35,7 @@ npm install
 ```bash
 npm start
 ```
-To start with FS persistence:
+To start with FS persistence(not working properly, just to use command line and persistence change):
 ```bash
 npm start -- --mode=fs
 ```
