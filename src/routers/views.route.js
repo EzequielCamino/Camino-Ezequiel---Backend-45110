@@ -5,6 +5,7 @@ const productsModel = require("../dao/services/mongo/models/product.model.js");
 const cartModel = require("../dao/services/mongo/models/cart.model.js");
 const usersModel = require("../dao/services/mongo/models/user.model.js");
 const {publicAuth, privateAuth, userAuth} = require("../middlewares/auth.js")
+const passport = require('passport');
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
@@ -73,7 +74,7 @@ route.get('/products',privateAuth, async (req,res)=>{
     });
 })
 
-route.get('/chat', userAuth, (req, res) => {
+route.get('/chat', passport.authenticate('jwt'), userAuth, (req, res) => {
     res.render('message');
 });
 
