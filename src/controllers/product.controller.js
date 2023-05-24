@@ -11,6 +11,7 @@ if(config.PERSISTENCE === "fs") {
     ProductService = require("../dao/services/mongo/product.service.js");
 }
 
+
 function deleteFiles(files){
     files.forEach(element => {            
         fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));

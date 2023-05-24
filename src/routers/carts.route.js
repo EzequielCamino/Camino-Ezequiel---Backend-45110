@@ -3,7 +3,6 @@ const route = Router();
 const CartController = require('../controllers/cart.controller.js')
 const { create, getById, addProduct, updateCart, updateProduct, removeCart, removeProduct, purchase } = require('../controllers/cart.controller.js');
 const { userAuth } = require("../middlewares/auth.js")
-const passport = require("passport");
 
 route.post("/", create.bind(CartController));
 route.get("/:cid", getById);

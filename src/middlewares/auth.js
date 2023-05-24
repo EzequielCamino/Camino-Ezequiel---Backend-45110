@@ -18,8 +18,6 @@ const publicAuth = (req, res, next) => {
 
 const adminAuth = (req, res, next) => {
     const role = req.session.role;
-    console.log(role)
-    console.log(role);
     if(role == "admin"){
         next();
     } else {
@@ -29,7 +27,6 @@ const adminAuth = (req, res, next) => {
 
 const userAuth = (req, res, next) => {
     const role = req.session.role;
-    console.log(role)
     if(role === "user"){
         next();
     } else {
