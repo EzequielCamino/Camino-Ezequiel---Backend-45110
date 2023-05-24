@@ -12,10 +12,15 @@
 - Session-file-store
 - Bcrypt
 - Cookie-parser
+- Jsonwebtoken
 - Passport
 - Passport-local
 - Passport-github2
 - Passport-jwt
+- Dotenv
+- Commander
+- Nodemailer
+- Twilio (not in use)
 
 ## Installation
 
@@ -30,6 +35,10 @@ npm install
 ```bash
 npm start
 ```
+To start with FS persistence:
+```bash
+npm start -- --mode=fs
+```
 
 ## Usage
 
@@ -37,16 +46,7 @@ All endpoints and their respective routes/bodies can be find here:
 
 [Postman Workspace](https://www.postman.com/ezequielcamino/workspace/camino-ezequiel-backend-45110)
 
-## Environment variables
-
-```bash
-const data = {
-    PORT: 8080,
-    MONGO_URL: 'mongodb://127.0.0.1:27017/ecommerce'
-};
-```
 #### For your convenience, products collection can be found at root as "products.json" so you can import it to MongoDB.
-#### Also you can find "data.js" with environment variables ready to use.
 
 ## Views
 
