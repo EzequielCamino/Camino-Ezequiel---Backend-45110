@@ -122,7 +122,7 @@ const purchase = async (req, res) => {
                 newCart.push(item);
             }
         }
-        const purchaser = req.session.user;
+        const purchaser = req.user.email;
         const amount = buyableCart.reduce((total, product) => total + (product.price * product.quantity), 0);
         const ticket = {
             amount,

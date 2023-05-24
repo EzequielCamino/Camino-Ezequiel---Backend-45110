@@ -29,7 +29,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: config.MONGO_URL,
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
-        ttl: 120
+        ttl: 15
     }),
     secret: config.COOKIESECRET,
     resave: true,
