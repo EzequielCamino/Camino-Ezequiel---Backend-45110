@@ -14,6 +14,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const initializePassport = require('./config/passport-config.js');
+const errorHandler = require("./middlewares/error.js");
 
 /* MONGOOSE */
 if(config.PERSISTENCE !== "fs"){
@@ -41,6 +42,7 @@ app.use(passport.session())
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(errorHandler);
 
 /* HANDLEBARS */
 app.engine('handlebars', handlebars.engine());

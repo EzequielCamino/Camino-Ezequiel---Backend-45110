@@ -3,6 +3,10 @@ const path = require('path');
 const uploader = require("../utils/multer.js");
 const productsModel = require("../dao/services/mongo/models/product.model.js");
 const configureSocket = require("../config/configure-socket.js");
+const generateProduct = require('../utils/mock.js');
+const CustomError = require('../Errors/CustomError.js');
+const EErrors = require('../Errors/enums.js');
+const { generateProductErrorInfo } = require('../Errors/info.js');
 let ProductService
 const config = require('../config/config.js');
 if(config.PERSISTENCE === "fs") {
@@ -14,7 +18,7 @@ if(config.PERSISTENCE === "fs") {
 
 function deleteFiles(files){
     files.forEach(element => {            
-        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));
+        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element.originalname));
     });
 }
 
@@ -73,8 +77,16 @@ const create = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({id: newProduct._id});
     } catch (error) {
+        const product = req.body;
+        console.log(req.files);
         deleteFiles(req.files);
-        res.status(400).send({error: "Invalid product format or assigned code"})
+        CustomError.createError({
+            name: "Product creation error",
+            cause: generateProductErrorInfo(product),
+            message: "Error trying to create product",
+            code: EErrors.INVALID_TYPES_ERROR
+        })
+        /* res.status(400).send({error: "Invalid product format or assigned code"}) */
     }
 }
 
@@ -105,6 +117,11 @@ const remove = async (req, res) => {
     }
 }
 
+const mockProducts = async (req, res) => {
+    const products = Array.from({ length: 100 }, () => generateProduct());
+    res.send({ status: "ok", payload: products });
+}
+
 module.exports = {
     upload,
     getAll,
@@ -112,4 +129,5 @@ module.exports = {
     create,
     update,
     remove,
+    mockProducts
 }

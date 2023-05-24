@@ -75,7 +75,6 @@ const updateProduct = async (req, res) => {
     }
 }
 
-
 const removeCart = async (req, res) => {
     try {
         const cid = req.params.cid;
