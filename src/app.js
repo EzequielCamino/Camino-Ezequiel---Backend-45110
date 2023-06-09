@@ -14,6 +14,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const initializePassport = require('./config/passport-config.js');
+const errorHandler = require("./middlewares/error.js");
+const logMiddleware = require('./middlewares/logger.js');
+const loggerRoute = require('./routers/logger.route.js');
 
 /* MONGOOSE */
 if(config.PERSISTENCE !== "fs"){
@@ -41,6 +44,8 @@ app.use(passport.session())
 app.use(express.static(__dirname + '/public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(errorHandler);
+app.use(logMiddleware);
 
 /* HANDLEBARS */
 app.engine('handlebars', handlebars.engine());
@@ -49,6 +54,7 @@ app.set('view engine', 'handlebars');
 
 /* ROUTES */
 app.use('/', viewsRoute);
+app.use('/api', loggerRoute);
 app.use('/api/products', productsRoute);
 app.use('/api/carts', cartsRoute);
 app.use('/api/sessions', usersRoute);
@@ -56,7 +62,7 @@ app.use('/api/cookies', cookiesRoute);
 
 /* WEBSOCKET & LISTEN */
 const httpServer = app.listen(config.PORT, () => {
-    console.log(`Servidor levantado en el puerto ${config.PORT}`, "\n", `Using ${config.PERSISTENCE} persistence model`);
+    console.log(`Server listening on port ${config.PORT}`, "\n", `Using ${config.PERSISTENCE} persistence model`, "\n", `Server running on ${config.ENVIRONMENT} environment`);
 });
 configureSocket(httpServer);
 const socketServer = configureSocket().getSocketServer();

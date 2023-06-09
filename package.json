@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/EzequielCamino/Camino-Ezequiel---Backend-45110#readme",
   "dependencies": {
+    "@faker-js/faker": "^8.0.1",
     "bcrypt": "^5.1.0",
     "commander": "^10.0.1",
     "connect-mongo": "^5.0.0",
@@ -37,6 +38,7 @@
     "session-file-store": "^1.5.0",
     "socket.io": "^4.6.1",
     "sweetalert2": "^11.7.3",
-    "twilio": "^4.11.1"
+    "twilio": "^4.11.1",
+    "winston": "^3.9.0"
   }
 }

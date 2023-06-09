@@ -3,9 +3,11 @@ const { Command } = require('commander');
 
 const program = new Command();
 program.option("-m, --mode <mode>", "Persistence", "mongo");
+program.option("-e, --env <env>", "Environment", "development")
 program.parse();
 
 const mode = program.opts().mode;
+const environment = program.opts().env;
 
 dotenv.config()
 
@@ -24,6 +26,7 @@ const config = {
     TWILIO_SMS_NUMBER: process.env.TWILIO_SMS_NUMBER,
     MY_NUMBER: process.env.MY_NUMBER,
     PERSISTENCE: mode,
+    ENVIRONMENT: environment
 }
 
 module.exports = config;

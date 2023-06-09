@@ -3,6 +3,10 @@ const path = require('path');
 const uploader = require("../utils/multer.js");
 const productsModel = require("../dao/services/mongo/models/product.model.js");
 const configureSocket = require("../config/configure-socket.js");
+const generateProduct = require('../utils/mock.js');
+const CustomError = require('../Errors/CustomError.js');
+const EErrors = require('../Errors/enums.js');
+const { generateProductErrorInfo } = require('../Errors/info.js');
 let ProductService
 const config = require('../config/config.js');
 if(config.PERSISTENCE === "fs") {
@@ -10,11 +14,11 @@ if(config.PERSISTENCE === "fs") {
 } else {
     ProductService = require("../dao/services/mongo/product.service.js");
 }
-
+const logger = require('../utils/winston.js');
 
 function deleteFiles(files){
     files.forEach(element => {            
-        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));
+        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element.originalname));
     });
 }
 
@@ -46,6 +50,7 @@ const getAll = async (req, res) => {
             nextLink: products.hasNextPage ? `http://localhost:8080/products?page=${page+1}` : null
         });
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(500).send(error);
     }
 }
@@ -60,6 +65,7 @@ const getById = async (req, res) => {
         }
         res.status(200).send({product});
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: "Product ID not found"});
     }
 }
@@ -73,8 +79,17 @@ const create = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({id: newProduct._id});
     } catch (error) {
+        const product = req.body;
+        console.log(req.files);
         deleteFiles(req.files);
-        res.status(400).send({error: "Invalid product format or assigned code"})
+        logger.fatal('Unhandled fatal error', error);
+        CustomError.createError({
+            name: "Product creation error",
+            cause: generateProductErrorInfo(product),
+            message: "Error trying to create product",
+            code: EErrors.INVALID_TYPES_ERROR
+        })
+        /* res.status(400).send({error: "Invalid product format or assigned code"}) */
     }
 }
 
@@ -86,6 +101,7 @@ const update = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({ModificatedProductID: id})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Product not updated. ID not found'})
     }
 }
@@ -101,8 +117,14 @@ const remove = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: pid})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Product not deleted. ID not found'});
     }
+}
+
+const mockProducts = async (req, res) => {
+    const products = Array.from({ length: 100 }, () => generateProduct());
+    res.send({ status: "ok", payload: products });
 }
 
 module.exports = {
@@ -112,4 +134,5 @@ module.exports = {
     create,
     update,
     remove,
+    mockProducts
 }

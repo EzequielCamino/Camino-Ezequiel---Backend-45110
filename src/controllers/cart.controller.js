@@ -11,6 +11,7 @@ if(config.PERSISTENCE === "fs") {
     CartService = require("../dao/services/mongo/cart.service.js");
     ProductService = require("../dao/services/mongo/product.service.js");
 }
+const logger = require('../utils/winston.js');
 
 
 const create = async (req, res) => {
@@ -18,6 +19,7 @@ const create = async (req, res) => {
         const response = await CartService.create();
         res.status(201).send({message: `Cart successfully created with ID:${response._id}`})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(500).send({error: 'Cart not created'});
     }
 }
@@ -28,6 +30,7 @@ const getById = async (req, res) => {
         const cid = await CartModel.findById(id).populate('products.product');
         res.status(200).send(cid);
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: "Cart ID not found"});
     }
 }
@@ -46,6 +49,7 @@ const addProduct = async (req, res) => {
         await CartService.findByIdAndUpdate(cid, cart);
         res.status(201).send({message: 'Product successfully added to cart'})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(400).send({error: 'Product was not added. Cart ID not found'});
     }
 }
@@ -57,6 +61,7 @@ const updateCart = async (req, res) => {
         await CartService.findByIdAndUpdate(id, data);
         res.status(201).send({ModificatedCartID: id})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Cart not updated. ID not found'})
     }
 }
@@ -71,10 +76,10 @@ const updateProduct = async (req, res) => {
         await CartService.findByIdAndUpdate(cid, cart)
         res.status(201).send({ModificatedCartID: cid})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Cart not updated. ID not found'})
     }
 }
-
 
 const removeCart = async (req, res) => {
     try {
@@ -82,6 +87,7 @@ const removeCart = async (req, res) => {
         await CartService.findByIdAndDelete(cid);
         return res.status(201).send({DeletedCartID: cid})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Cart not deleted. ID not found'});
     }
 }
@@ -133,6 +139,7 @@ const purchase = async (req, res) => {
         let result = await CartService.findByIdAndUpdate(id, {products: newCart})
         res.status(200).send({message: 'Purchase completed', NotBuyedProducts: newCart}); 
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Purchase not completed. Cart ID not found'});
     }
 }

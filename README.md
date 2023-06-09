@@ -21,6 +21,7 @@
 - Commander
 - Nodemailer
 - Twilio (not in use)
+- Winston
 
 ## Installation
 
@@ -35,9 +36,13 @@ npm install
 ```bash
 npm start
 ```
-To start with FS persistence(not working properly, just to use command line and persistence change):
+To start with FS persistence(not working properly)(DEFAULT IS MONGO):
 ```bash
 npm start -- --mode=fs
+```
+To start on production environment(DEFAULT IS DEVELOPMENT):
+```bash
+npm start -- --env=production
 ```
 
 ## Usage
@@ -62,6 +67,7 @@ All endpoints and their respective routes/bodies can be find here:
 #### Other views:
 - Chat with socket (only accesible as an User): [http://localhost:8080/chat](http://localhost:8080/chat)
 - Cookie test: [http://localhost:8080/cookies](http://localhost:8080/cookies)
+- Logger Test: [http://localhost:8080/api/loggerTest](http://localhost:8080/api/loggerTest)
 
 ## Notes
 
