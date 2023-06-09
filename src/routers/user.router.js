@@ -2,11 +2,9 @@ const { Router } = require("express");
 const route = Router();
 const { privateAuth } = require("../middlewares/auth.js");
 const passport = require("passport");
-const { login, logout, githubCallback, current } = require ("../controllers/user.controller.js");
+const { register, login, logout, githubCallback, current } = require ("../controllers/user.controller.js");
 
-route.post('/register', passport.authenticate('register', {failureRedirect: '/registerfailure'}), async (req, res) => {
-    res.status(200).send(req.user);
-})
+route.post('/register', passport.authenticate('register', {failureRedirect: '/registerfailure'}), register)
 
 route.get('/registerfailure', async (req, res) => {
     res.send({error: "Register failed"});

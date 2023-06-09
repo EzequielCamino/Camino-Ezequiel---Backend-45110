@@ -14,7 +14,7 @@ if(config.PERSISTENCE === "fs") {
 } else {
     ProductService = require("../dao/services/mongo/product.service.js");
 }
-
+const logger = require('../utils/winston.js');
 
 function deleteFiles(files){
     files.forEach(element => {            
@@ -50,6 +50,7 @@ const getAll = async (req, res) => {
             nextLink: products.hasNextPage ? `http://localhost:8080/products?page=${page+1}` : null
         });
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(500).send(error);
     }
 }
@@ -64,6 +65,7 @@ const getById = async (req, res) => {
         }
         res.status(200).send({product});
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: "Product ID not found"});
     }
 }
@@ -80,6 +82,7 @@ const create = async (req, res) => {
         const product = req.body;
         console.log(req.files);
         deleteFiles(req.files);
+        logger.fatal('Unhandled fatal error', error);
         CustomError.createError({
             name: "Product creation error",
             cause: generateProductErrorInfo(product),
@@ -98,6 +101,7 @@ const update = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         res.status(201).send({ModificatedProductID: id})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Product not updated. ID not found'})
     }
 }
@@ -113,6 +117,7 @@ const remove = async (req, res) => {
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: pid})
     } catch (error) {
+        logger.error('Handled error', error);
         res.status(404).send({error: 'Product not deleted. ID not found'});
     }
 }
