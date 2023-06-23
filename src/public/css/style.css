@@ -1,12 +1,21 @@
 h1{
     text-align: center;
 }
+h1 > a {
+    color: blue;
+    cursor: pointer;
+    font-weight: bold;
+}
 form {
     display: flex;
     gap: 1vw;
     flex-direction: column;
     align-items: center;
     margin: 2vw;
+}
+form > p > a{
+    color: blue;
+    cursor: pointer;
 }
 form > input {
     width: 20vw;

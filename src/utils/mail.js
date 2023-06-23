@@ -10,7 +10,7 @@ const transport = nodemailer.createTransport({
     }
 })
 
-function sendMail(amount, purchaser) {
+function sendPurchaseMail(amount, purchaser) {
     transport.sendMail({
         from: 'E-commerce <ezeeqii@gmail.com>',
         to: purchaser,
@@ -22,6 +22,20 @@ function sendMail(amount, purchaser) {
         </div>
         `
     })
-} 
+}
 
-module.exports = { transport, sendMail };
+function sendRecoverMail(email, token){
+    transport.sendMail({
+        from: 'E-commerce <ezeeqii@gmail.com>',
+        to: email,
+        subject: 'Password recovery',
+        html:`
+        <div>
+          <h1>Here is your link to recover your password</h1>
+          <p> http://localhost:8080/api/sessions/${token} </p>
+        </div>
+        `
+    })
+}
+
+module.exports = { transport, sendPurchaseMail, sendRecoverMail };

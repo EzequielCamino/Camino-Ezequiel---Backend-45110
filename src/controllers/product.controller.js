@@ -18,7 +18,7 @@ const logger = require('../utils/winston.js');
 
 function deleteFiles(files){
     files.forEach(element => {            
-        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element.originalname));
+        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));
     });
 }
 
@@ -109,9 +109,12 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
     try {
         const pid = req.params.pid;
-        const imgExists = await ProductService.findById(pid);
-        if(imgExists.thumbnails){
-            deleteFiles(imgExists.thumbnails)
+        const product = await ProductService.findById(pid);
+        if(product.owner !== res.user.email && res.user.email !== "adminCoder@coder.com"){
+            return res.status(400).send({error: "You can't delete other user products"})
+        }
+        if(product.thumbnails){
+            deleteFiles(product.thumbnails)
         }            
         await ProductService.findByIdAndDelete(pid);
         configureSocket().getSocketServer().emit('productsModified');

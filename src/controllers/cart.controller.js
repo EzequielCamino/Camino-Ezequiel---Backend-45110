@@ -1,6 +1,6 @@
 const CartModel = require("../dao/services/mongo/models/cart.model.js");
 const TicketService = require('../dao/services/mongo/ticket.service.js');
-const { sendMail } = require('../utils/mail.js');
+const { sendPurchaseMail } = require('../utils/mail.js');
 const config = require('../config/config.js');
 let CartService;
 let ProductService;
@@ -39,6 +39,10 @@ const addProduct = async (req, res) => {
     try {
         const cid = req.params.cid;
         const pid = req.params.pid;
+        const product = await ProductService.findById(pid);
+        if(product.owner === res.user.email){
+            return res.status(400).send({error: "You can't add your own products to cart"});
+        }
         const cart = await CartService.findById(cid)
         const productExists = cart.products.find(products=> products.product == pid);
         if(productExists){
@@ -135,7 +139,7 @@ const purchase = async (req, res) => {
             purchaser
         }
         await TicketService.create(ticket);
-        await sendMail(amount, purchaser);
+        await sendPurchaseMail(amount, purchaser);
         let result = await CartService.findByIdAndUpdate(id, {products: newCart})
         res.status(200).send({message: 'Purchase completed', NotBuyedProducts: newCart}); 
     } catch (error) {

@@ -2,10 +2,11 @@
 <form onsubmit="login(event)">
     <input type="email" name="form-email" id="form-email" placeholder="e-mail">
     <input type="password" name="form-password" id="form-password" placeholder="Password">
+    <p>¿Olvidaste tu contraseña? - <a onclick="recover()">Click aquí</a></p>
     <br>
     <input type="submit" value="Login">
 </form>
 <a href="/api/sessions/github">
-    <button> Login with Github</button>
+    <button>Login with Github</button>
 </a>
 <script src="../../js/login.js"></script>

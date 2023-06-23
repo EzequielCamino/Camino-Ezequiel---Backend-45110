@@ -9,6 +9,7 @@
   "status": true,
   "stock": 5,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img1.jpg"
   ],
@@ -24,6 +25,7 @@
   "status": true,
   "stock": 4,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img2.jpg"
   ],
@@ -37,8 +39,9 @@
   "code": "CW7463-401",
   "price": 300,
   "status": true,
-  "stock": 2,
+  "stock": 1,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img3.jpg"
   ],
@@ -52,8 +55,9 @@
   "code": "FY4576",
   "price": 180,
   "status": true,
-  "stock": 3,
+  "stock": 2,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img4.jpg"
   ],
@@ -67,8 +71,9 @@
   "code": "555088-706",
   "price": 180,
   "status": true,
-  "stock": 7,
+  "stock": 6,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img5.jpg"
   ],
@@ -82,8 +87,9 @@
   "code": "553558-411",
   "price": 250,
   "status": true,
-  "stock": 4,
+  "stock": 3,
   "category": "Sneakers",
+  "owner": "admin",
   "thumbnails": [
     "img6.jpg"
   ],
@@ -97,8 +103,9 @@
   "code": "FW20 OLIVE/KHAKI",
   "price": 200,
   "status": true,
-  "stock": 6,
+  "stock": 4,
   "category": "Clothes",
+  "owner": "admin",
   "thumbnails": [
     "img7.jpg"
   ],
@@ -114,6 +121,7 @@
   "status": true,
   "stock": 3,
   "category": "Clothes",
+  "owner": "admin",
   "thumbnails": [
     "img8.jpg"
   ],
@@ -129,6 +137,7 @@
   "status": true,
   "stock": 2,
   "category": "Clothes",
+  "owner": "admin",
   "thumbnails": [
     "img9.jpg"
   ],
@@ -142,8 +151,9 @@
   "code": "Carhartt WIP Heather Grey",
   "price": 60,
   "status": true,
-  "stock": 2,
+  "stock": 0,
   "category": "Clothes",
+  "owner": "admin",
   "thumbnails": [
     "img10.jpg"
   ],
@@ -159,13 +169,14 @@
   "status": true,
   "stock": 3,
   "category": "Clothes",
+  "owner": "admin",
   "thumbnails": [
     "img11.jpg"
   ],
   "__v": 0
 },{
   "_id": {
-    "$oid": "642b5b38f955cc4674bf45d9"
+    "$oid": "6494f2013fe67d9564125dd8"
   },
   "title": "Drew House White Face Socks",
   "description": "Lightweight, soft cotton-blend for all-day comfort. Medium cushioning throughout foot for all day comfort. Ribbed construction provides added stretch and comfort",
@@ -174,6 +185,7 @@
   "status": true,
   "stock": 6,
   "category": "Clothes",
+  "owner": "ezeeqii@gmail.com",
   "thumbnails": [
     "img12.jpg"
   ],

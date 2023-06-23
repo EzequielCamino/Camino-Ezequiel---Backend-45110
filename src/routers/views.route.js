@@ -6,6 +6,7 @@ const cartModel = require("../dao/services/mongo/models/cart.model.js");
 const usersModel = require("../dao/services/mongo/models/user.model.js");
 const {publicAuth, privateAuth, userAuth} = require("../middlewares/auth.js")
 const passport = require('passport');
+const { verifyToken } = require('../utils/jwt.js');
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
@@ -95,6 +96,24 @@ route.get('/carts/:cid', async (req,res)=>{
         res.render('carts', {
             title: "Backend 45110 - Cart",
             cart: false
+        })
+    }
+})
+
+route.get('/api/sessions/:token', async (req, res) => {
+    const token = req.params.token;
+    try {
+        const user = await verifyToken(token)
+        const email = user.email;
+        const wrongToken = false;
+        res.render('recover', {
+            email,
+            wrongToken
+        })
+    } catch (error) {
+        const wrongToken = true;
+        res.render('recover', {
+            wrongToken
         })
     }
 })

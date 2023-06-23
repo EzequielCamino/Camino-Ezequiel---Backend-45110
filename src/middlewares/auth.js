@@ -43,4 +43,32 @@ const userAuth = (req, res, next) => {
     }
 }
 
-module.exports = {publicAuth, privateAuth, adminAuth, userAuth};
+const premiumAdminAuth = (req, res, next) => {
+    try {
+        const role = req.user.role
+        if(role == "admin" || role == "premium"){
+            res.user = req.user;
+            next();
+        } else {
+            res.status(401).send({message: `Unauthorized role. You must be an admin or premium user to access. Your role is ${role}`});
+        }
+    } catch (error) {
+        res.status(401).send({message: 'Unauthorized. You must be logged in'});
+    }
+}
+
+const premiumUserAuth = (req, res, next) => {
+    try {
+        const role = req.user.role
+        if(role == "user" || role == "premium"){
+            res.user = req.user;
+            next();
+        } else {
+            res.status(401).send({message: `Unauthorized role. You must be an user or premium user to access. Your role is ${role}`});
+        }
+    } catch (error) {
+        res.status(401).send({message: 'Unauthorized. You must be logged in'});
+    }
+}
+
+module.exports = {publicAuth, privateAuth, adminAuth, userAuth, premiumAdminAuth, premiumUserAuth};

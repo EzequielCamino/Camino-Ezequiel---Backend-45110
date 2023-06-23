@@ -3,7 +3,7 @@ const config = require("../config/config.js")
 
 function generateToken(user){
     return jwt.sign(user, config.JWT_TOKEN, {
-        expiresIn: '24h'
+        expiresIn: '1h'
     })
 }
 

@@ -13,7 +13,7 @@ class UserService {
         return this.#persistence.create(product);
     }
     async findById(id){
-        return this.#persistence.findById(id);
+        return this.#persistence.findOne(id);
     }
     async findByIdAndUpdate(id, data){
         return this.#persistence.findByIdAndUpdate(id,data);
