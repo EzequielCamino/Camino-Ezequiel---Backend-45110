@@ -1,0 +1,343 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products
+      tags:
+        - Products
+      responses:
+        200:
+          description: Products successfully obtained
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status response
+                    value: success
+                    example: success
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+
+        400:
+          description: Bad request. Normaly a pagination error
+        500:
+          description: Server internal error
+    post:
+      summary: Add a product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestBodies/createdProduct'
+      responses:
+        201:
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Created product ID
+                    value: 642a1899e03d0a146ec07bec
+                    example: 642a1899e03d0a146ec07bec
+  /api/products/{uid}:
+    get:
+      summary: Get a specific product
+      tags:
+        - Products
+      parameters:
+        - name: uid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Product successfully obtained
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status response
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Product'
+        404:
+          description: Product ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Product ID not found
+                    example: Product ID not found
+    put:
+      summary: Updates a specific product
+      tags:
+        - Products
+      parameters:
+        - name: uid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/requestBodies/updateProduct'
+      responses:
+        201:
+          description: Product successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Status response
+                    value: success
+                    example: success
+                  payload:
+                    $ref: '#/components/schemas/Product'
+        404:
+          description: Product not updated. ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Product not updated. ID not found
+                    example: Product not updated. ID not found
+    delete:
+      summary: Deletes a specific product
+      tags:
+        - Products
+      parameters:
+        - name: uid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Product successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  DeletedProductID:
+                    type: string
+                    description: Deleted Product ID
+                    value: 642a1899e03d0a146ec07bec
+                    example: 642a1899e03d0a146ec07bec
+        400:
+          description: Can't delete other user product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: You can't delete other user products
+                    example: You can't delete other user products
+        404:
+          description: Product ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Product not deleted. ID not found
+                    example: Product not deleted. ID not found
+components:
+  schemas:
+    updatedProduct:
+      type: object
+      properties:
+        _id: 
+          type: ObjectId
+          description: The product unique ID
+          example: 642a1899e03d0a146ec07bec
+        title: 
+          type: string
+          description: The product title
+          example: Product title
+        description:
+          type: string
+          description: The product description
+          example: Product description
+        code: 
+          type: string
+          description: The product unique code
+          example: Product code
+        price: 
+          type: number
+          description: The product price
+          example: 200
+        status: 
+          type: boolean
+          description: The product status
+          example: true
+        stock: 
+          type: number
+          description: The product stock
+          example: 5
+        category: 
+          type: string
+          description: The product category
+          example: Product category
+        owner: 
+          type: string
+          description: The product owner
+          example: admin
+        thumbnails:
+          type: array
+          description: The product thumbnails
+          example: ["img.jpg"]
+      example:
+        title: Product title
+        description: Product description
+        code: Product code
+        price: 200
+        status: true
+        stock: 5
+        category: Product category
+        owner: admin
+        thumbnails: ["img.jpg"]
+    createdProduct:
+      type: object
+      properties:
+        title: 
+          type: string
+          description: The product title
+          example: Product title
+        description:
+          type: string
+          description: The product description
+          example: Product description
+        code: 
+          type: string
+          description: The product unique code
+          example: Product code
+        price: 
+          type: number
+          description: The product price
+          example: 200
+        status: 
+          type: boolean
+          description: The product status
+          example: true
+        stock: 
+          type: number
+          description: The product stock
+          example: 5
+        category: 
+          type: string
+          description: The product category
+          example: Product category
+        owner: 
+          type: string
+          description: The product owner
+          example: admin
+        thumbnails:
+          type: array
+          description: The product thumbnails
+          example: ["img.jpg"]
+      example:
+        title: Product title
+        description: Product description
+        code: Product code
+        price: 200
+        status: true
+        stock: 5
+        category: Product category
+        owner: admin
+        thumbnails: ["img.jpg"]
+    requestBodies:
+      Product:
+        type: object
+        required:
+          - title
+          - description
+          - code
+          - price
+          - stock
+          - category
+        properties:
+          title:
+            type: string
+            description: The product title
+            example: Product title
+          description:
+            type: string
+            description: The product description
+            example: Product description
+          code: 
+            type: string
+            description: The product unique code
+            example: Product code
+          price: 
+            type: number
+            description: The product price
+            example: 200
+          status: 
+            type: boolean
+            description: The product status
+            example: true
+          stock: 
+            type: number
+            description: The product stock
+            example: 5
+          category: 
+            type: string
+            description: The product category
+            example: Product category
+          owner: 
+            type: string
+            description: The product owner
+            example: admin
+          thumbnails:
+            type: array
+            description: The product thumbnails
+            example: ["img.jpg"]
+        example:
+          title: Product title
+          description: Product description
+          code: Product code
+          price: 200
+          status: true
+          stock: 5
+          category: Product category
+          owner: admin
+          thumbnails: ["img.jpg"]

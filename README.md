@@ -55,6 +55,7 @@ All endpoints and their respective routes/bodies can be find here:
 
 ## Views
 
+- API Documentation: [http://localhost:8080/apidocs](http://localhost:8080/apidocs)
 - Products without pagination and querys: [http://localhost:8080/](http://localhost:8080/)
 - RealTimeProducts (with socket connection): [http://localhost:8080/realtimeproducts](http://localhost:8080/realtimeproducts)
 - Products with pagination and querys (has to be logged in): [http://localhost:8080/products](http://localhost:8080/products)

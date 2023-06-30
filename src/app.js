@@ -17,6 +17,8 @@ const initializePassport = require('./config/passport-config.js');
 const errorHandler = require("./middlewares/error.js");
 const logMiddleware = require('./middlewares/logger.js');
 const loggerRoute = require('./routers/logger.route.js');
+const spec = require('./docs/swagger-options.js');
+const swaggerUiExpress = require('swagger-ui-express');
 
 /* MONGOOSE */
 if(config.PERSISTENCE !== "fs"){
@@ -27,6 +29,7 @@ if(config.PERSISTENCE !== "fs"){
 }
 
 /* MIDDLEWARES */
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(spec));
 app.use(cookieParser())
 app.use(session({
     store: MongoStore.create({
