@@ -20,14 +20,14 @@ paths:
                   payload:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: '#components/schemas/product'
 
         400:
           description: Bad request. Normaly a pagination error
         500:
           description: Server internal error
     post:
-      summary: Add a product
+      summary: Add a product (Only Admin and Premium)
       tags:
         - Products
       requestBody:
@@ -35,7 +35,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/requestBodies/createdProduct'
+              $ref: '#/components/schemas/createdProduct'
       responses:
         201:
           description: Product successfully created
@@ -49,13 +49,25 @@ paths:
                     description: Created product ID
                     value: 642a1899e03d0a146ec07bec
                     example: 642a1899e03d0a146ec07bec
-  /api/products/{uid}:
+        401:
+          description: Product not created. Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: The error description
+                    value: Unauthorized
+                    example: Unauthorized
+  /api/products/{pid}:
     get:
       summary: Get a specific product
       tags:
         - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           description: Product ID
           required: true
@@ -69,13 +81,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: string
-                    description: Status response
-                    value: success
-                    example: success
-                  payload:
-                    $ref: '#/components/schemas/Product'
+                  product:
+                    $ref: '#/components/schemas/product'
         404:
           description: Product ID not found
           content:
@@ -89,11 +96,11 @@ paths:
                     value: Product ID not found
                     example: Product ID not found
     put:
-      summary: Updates a specific product
+      summary: Updates a specific product (Only Admin)
       tags:
         - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           description: Product ID
           required: true
@@ -104,7 +111,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/requestBodies/updateProduct'
+              $ref: '#/components/schemas/updatedProduct'
       responses:
         201:
           description: Product successfully updated
@@ -119,7 +126,19 @@ paths:
                     value: success
                     example: success
                   payload:
-                    $ref: '#/components/schemas/Product'
+                    $ref: '#/components/schemas/product'
+        401:
+          description: Product not updated. Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: The error description
+                    value: Unauthorized
+                    example: Unauthorized
         404:
           description: Product not updated. ID not found
           content:
@@ -133,11 +152,11 @@ paths:
                     value: Product not updated. ID not found
                     example: Product not updated. ID not found
     delete:
-      summary: Deletes a specific product
+      summary: Deletes a specific product (Only Admin and Product Owners)
       tags:
         - Products
       parameters:
-        - name: uid
+        - name: pid
           in: path
           description: Product ID
           required: true
@@ -168,6 +187,18 @@ paths:
                     description: Error description
                     value: You can't delete other user products
                     example: You can't delete other user products
+        401:
+          description: Product not deleted. Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: The error description
+                    value: Unauthorized
+                    example: Unauthorized
         404:
           description: Product ID not found
           content:
@@ -180,6 +211,360 @@ paths:
                     description: Error description
                     value: Product not deleted. ID not found
                     example: Product not deleted. ID not found
+  /api/carts:
+    post:
+      summary: Create a new cart
+      tags:
+        - Carts
+      responses:
+        201:
+          description: Cart successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Created cart ID
+                    value: Cart successfully created with ID 642a1899e03d0a146ec07bec
+                    example: Cart successfully created with ID 642a1899e03d0a146ec07bec
+        500:
+          description: Cart not created. Something broke
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error description
+                    value: Cart not created
+                    example: Cart not created
+  /api/carts/{cid}:
+    get:
+      summary: Get a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cart successfully obtained
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/cart'
+        404:
+          description: Product ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Product ID not found
+                    example: Product ID not found
+    put:
+      summary: Updates a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updatedCart'
+      responses:
+        201:
+          description: Cart successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ModificatedCartID:
+                    type: string
+                    description: Modificated Cart ID
+                    value: 642a1dd5e03d0a146ec07c01
+                    example: 642a1dd5e03d0a146ec07c01
+        400:
+          description: Cart not updated. ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error description
+                    value: Cart not updated. ID not found
+                    example: Cart not updated. ID not found
+    delete:
+      summary: Deletes a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Cart successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  DeletedCartID:
+                    type: string
+                    description: Deleted Cart ID
+                    value: 642a1899e03d0a146ec07bec
+                    example: 642a1899e03d0a146ec07bec
+        404:
+          description: Cart ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Cart not deleted. ID not found
+                    example: Cart not deleted. ID not found
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Adds a specific product to a specific cart (Only User)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Product successfully added to cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                    value: Product successfully added to cart
+                    example: Product successfully added to cart
+        400:
+          description: Product not added. Cart or product ID not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Product was not added. Cart or product ID not found
+                    example: Product was not added. Cart or product ID not found
+        401:
+          description: Product not added. Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: The error description
+                    value: Unauthorized
+                    example: Unauthorized
+        403:
+          description: Product not added. Owners can't add their own products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: You can't add your own products to cart
+                    example: You can't add your own products to cart
+    put:
+      summary: Modifies a specific product quantity in a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: number
+                  description: Product quantity to be updated
+                  example: 3
+      responses:
+        201:
+          description: Product quantity in cart successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ModificatedCartID:
+                    type: string
+                    description: Modificated Cart ID
+                    value: 642a1dd5e03d0a146ec07c01
+                    example: 642a1dd5e03d0a146ec07c01
+        404:
+          description: Cart not updated. ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error description
+                    value: Cart not updated. ID not found
+                    example: Cart not updated. ID not found
+    delete:
+      summary: Deletes a specific product in a specific cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            type: string
+      responses:
+        201:
+          description: Product in cart successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  EliminatedProductID:
+                    type: string
+                    description: Eliminated Product ID
+                    value: 642a1dd5e03d0a146ec07c01
+                    example: 642a1dd5e03d0a146ec07c01
+        404:
+          description: Product in cart not deleted. Product or cart ID not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error description
+                    value: Product not deleted. Product ID not found
+                    example: Product not deleted. Cart ID not found
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Purchases a specific cart (Only User)
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Cart was purchased successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                    value: Purchase completed
+                    example: Purchase completed
+                  NotBuyedProducts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/cartProduct'
+        401:
+          description: Cart not purchased. Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Error:
+                    type: string
+                    description: The error description
+                    value: Unauthorized
+                    example: Unauthorized
+        404:
+          description: Cart wasn't purchased. Cart ID not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error description
+                    value: Purchase not completed. Cart ID not found
+                    example: Purchase not completed. Cart ID not found
 components:
   schemas:
     updatedProduct:
@@ -284,60 +669,103 @@ components:
         category: Product category
         owner: admin
         thumbnails: ["img.jpg"]
-    requestBodies:
-      Product:
-        type: object
-        required:
-          - title
-          - description
-          - code
-          - price
-          - stock
-          - category
-        properties:
-          title:
-            type: string
-            description: The product title
-            example: Product title
-          description:
-            type: string
-            description: The product description
-            example: Product description
-          code: 
-            type: string
-            description: The product unique code
-            example: Product code
-          price: 
-            type: number
-            description: The product price
-            example: 200
-          status: 
-            type: boolean
-            description: The product status
-            example: true
-          stock: 
-            type: number
-            description: The product stock
-            example: 5
-          category: 
-            type: string
-            description: The product category
-            example: Product category
-          owner: 
-            type: string
-            description: The product owner
-            example: admin
-          thumbnails:
-            type: array
-            description: The product thumbnails
-            example: ["img.jpg"]
-        example:
-          title: Product title
-          description: Product description
-          code: Product code
-          price: 200
-          status: true
-          stock: 5
-          category: Product category
-          owner: admin
-          thumbnails: ["img.jpg"]
+    product:
+      type: object
+      required:
+        - title
+        - description
+        - code
+        - price
+        - stock
+        - category
+      properties:
+        _id:
+          type: ObjectId
+          description: The product ID
+          example: 642a1899e03d0a146ec07bec
+        title:
+          type: string
+          description: The product title
+          example: Product title
+        description:
+          type: string
+          description: The product description
+          example: Product description
+        code: 
+          type: string
+          description: The product unique code
+          example: Product code
+        price: 
+          type: number
+          description: The product price
+          example: 200
+        status: 
+          type: boolean
+          description: The product status
+          example: true
+        stock: 
+          type: number
+          description: The product stock
+          example: 5
+        category: 
+          type: string
+          description: The product category
+          example: Product category
+        owner: 
+          type: string
+          description: The product owner
+          example: admin
+        thumbnails:
+          type: array
+          description: The product thumbnails
+          example: ["img.jpg"]
+      example:
+        title: Product title
+        description: Product description
+        code: Product code
+        price: 200
+        status: true
+        stock: 5
+        category: Product category
+        owner: admin
+        thumbnails: ["img.jpg"]
+    cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: The cart ID
+          example: 6493a1558595b6d282112099
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/cartProduct'
+    cartProduct:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/product'
+        quantity:
+          type: number
+          description: Product quantity
+          example: 2
+        _id:
+          type: ObjectId
+          description: Product in cart ID
+          example: 64a63089690a7f3711c48111
+    updatedCart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: ObjectId
+                description: Product in cart ID
+                example: 64a63089690a7f3711c48111
+              quantity:
+                type: number
+                description: Product quantity
+                example: 2

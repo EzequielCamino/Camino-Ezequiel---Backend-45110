@@ -41,7 +41,7 @@ const addProduct = async (req, res) => {
         const pid = req.params.pid;
         const product = await ProductService.findById(pid);
         if(product.owner === res.user.email){
-            return res.status(400).send({error: "You can't add your own products to cart"});
+            return res.status(403).send({error: "You can't add your own products to cart"});
         }
         const cart = await CartService.findById(cid)
         const productExists = cart.products.find(products=> products.product == pid);
@@ -54,7 +54,7 @@ const addProduct = async (req, res) => {
         res.status(201).send({message: 'Product successfully added to cart'})
     } catch (error) {
         logger.error('Handled error', error);
-        res.status(400).send({error: 'Product was not added. Cart ID not found'});
+        res.status(400).send({error: 'Product was not added. Cart or product ID not found'});
     }
 }
 
