@@ -1,6 +1,6 @@
 # Camino Ezequiel - Backend-45110
 
-## Dependecies
+## Dependencies
 - Express
 - Express-handlebars
 - Mongoose
@@ -22,6 +22,12 @@
 - Nodemailer
 - Twilio (not in use)
 - Winston
+
+### Dev Dependencies
+- Nodemon
+- Mocha
+- Chai
+- Supertest
 
 ## Installation
 
