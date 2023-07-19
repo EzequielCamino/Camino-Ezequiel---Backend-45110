@@ -100,7 +100,7 @@ route.get('/carts/:cid', async (req,res)=>{
     }
 })
 
-route.get('/api/sessions/:token', async (req, res) => {
+route.get('/api/sessions/recover/:token', async (req, res) => {
     const token = req.params.token;
     try {
         const user = await verifyToken(token)

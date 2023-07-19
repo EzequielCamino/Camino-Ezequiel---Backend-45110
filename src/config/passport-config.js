@@ -51,6 +51,7 @@ const initializePassport = () => {
                 if (!user || !validateHash(password, user.password)) {
                     return done('wrong mail or password', false);
                 }
+                await usersModel.findOneAndUpdate({email: username}, {last_connection: new Date()})
                 /* req.session.role = "usuario" */
                 return done(null, user);
             } catch (error) {
@@ -105,6 +106,7 @@ const initializePassport = () => {
     });
     passport.deserializeUser(async (id, done) =>{
         const user = await usersModel.findById(id);
+        await usersModel.findByIdAndUpdate(id, {last_connection: new Date()});
         done(null, user);
     });
 }

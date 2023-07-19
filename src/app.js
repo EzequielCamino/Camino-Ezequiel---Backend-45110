@@ -64,8 +64,8 @@ app.use('/api/sessions', usersRoute);
 app.use('/api/cookies', cookiesRoute);
 
 /* WEBSOCKET & LISTEN */
-const httpServer = app.listen(config.PORT, () => {
-    console.log(`Server listening on port ${config.PORT}`, "\n", `Using ${config.PERSISTENCE} persistence model`, "\n", `Server running on ${config.ENVIRONMENT} environment`);
+const httpServer = app.listen(config.PORT||8080, () => {
+    console.log(`Server listening on port ${config.PORT||8080}`, "\n", `Using ${config.PERSISTENCE} persistence model`, "\n", `Server running on ${config.ENVIRONMENT} environment`);
 });
 configureSocket(httpServer);
 const socketServer = configureSocket().getSocketServer();

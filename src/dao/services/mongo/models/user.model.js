@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const usersCollection = "users";
 
+const documentsSchema = new mongoose.Schema({
+    name: {type: String},
+    reference: {type: String}
+})
+
 const usersSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -36,6 +41,11 @@ const usersSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "user"
+    },
+    documents: [documentsSchema],
+    last_connection: {
+        type: Date,
+        default: new Date()
     }
 });
 

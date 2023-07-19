@@ -18,7 +18,7 @@ const logger = require('../utils/winston.js');
 
 function deleteFiles(files){
     files.forEach(element => {            
-        fs.unlinkSync(path.join(__dirname, "..", '/public/img', element));
+        fs.unlinkSync(path.join(__dirname, "..", '/public/img/products', element));
     });
 }
 
