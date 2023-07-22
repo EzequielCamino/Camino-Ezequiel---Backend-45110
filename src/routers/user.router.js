@@ -2,7 +2,7 @@ const { Router } = require("express");
 const route = Router();
 const { privateAuth } = require("../middlewares/auth.js");
 const passport = require("passport");
-const { register, login, logout, githubCallback, current, recoveryRequest, restore, changeRole } = require ("../controllers/user.controller.js");
+const { upload, register, login, logout, githubCallback, current, recoveryRequest, restore, changeRole, uploadDocuments } = require ("../controllers/user.controller.js");
 const { generateToken } = require('../utils/jwt.js');
 
 route.post('/register', passport.authenticate('register', {failureRedirect: '/registerfailure'}), register);
@@ -30,5 +30,7 @@ route.post('/recover', recoveryRequest);
 route.post('/restore', restore);
 
 route.post('/premium/:id', changeRole);
+
+route.post('/:uid/documents', upload, uploadDocuments);
 
 module.exports = route

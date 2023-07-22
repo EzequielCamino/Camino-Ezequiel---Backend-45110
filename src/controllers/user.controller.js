@@ -4,6 +4,19 @@ const { generateToken } = require("../utils/jwt.js")
 const logger = require('../utils/winston.js');
 const { sendRecoverMail } = require('../utils/mail.js');
 const { createHash, validateHash } = require('../utils/bcrypt.js');
+const uploader = require("../utils/multer.js");
+const { profile } = require("winston");
+
+const upload = uploader.array('documents');
+
+/* (req, res, next) => {
+    if(req.body.documents){
+        uploader.array('documents')
+    }
+} */
+const uploadProfile = (req, res, next) => {
+    req.body.profile? uploader.array('profile') : next()
+};
 
 const register = async (req, res) => {
     logger.info(`User ${req.user.email} registered`);
@@ -102,6 +115,48 @@ const restore = async (req, res) => {
     }
 }
 
+const uploadDocuments = async (req, res) => {
+    try {
+        const id = req.params.uid;
+        const files = req.files;
+        console.log(files);
+        const user = await usersModel.findOne({_id: id});
+        /* const status = files.map(f => (
+            switch (f.originalname) {
+                case profile:
+                    profile: true
+                    break;
+                case 
+                default:
+                    res.status(404).send({error: 'Documents failed to upload. User ID not found'});
+                    break;
+            }
+                
+
+        )) */
+        const documents = files.map(f => ({
+            name: f.originalname,
+            reference: `/public/documents/${f.filename}`
+          }))
+        user.documents.push(...documents);
+        await usersModel.findByIdAndUpdate({_id: id}, {documents: user.documents});
+        /* const status = {
+            files.forEach(file => {
+                file.originalname
+            })
+        }
+        const documents = [...user?.documents, files.forEach(file => {
+            name: file.originalname
+            reference: file.path
+        })]; */
+        /* user.status = true; */
+        res.status(201).send({ message: `Files uploaded successfully and user with ID ${id} updated` });
+    } catch (error) {
+        logger.error('Handled error', error);
+        res.status(404).send({error: 'Documents failed to upload. User ID not found'});
+    }
+}
+
 const changeRole = async (req, res) => {
     /* const role = req.user.role;
     const id = req.params.id;
@@ -131,7 +186,14 @@ const changeRole = async (req, res) => {
         }
         if(user.role === "user"){
             try {
-                await usersModel.findOneAndUpdate({_id: id}, {role: "premium"});
+                const user = await usersModel.findOne({_id: id});
+                const userDocuments = user.documents.map(doc => doc.name.split('.')[0]);
+                const neededDocuments = ['address', 'identification', 'profile', 'status'];
+                const validation = neededDocuments.every(doc => userDocuments.includes(doc));
+                if(!validation){
+                    return res.status(400).send({message:"You haven't finished uploading your information"})
+                }
+                await usersModel.findOneAndUpdate({_id: id}, {role: "premium"})
                 return res.status(200).send({status:"role changed to premium"});
             } catch (error) {
                 return res.status(500).send({error: "Something went wrong"});
@@ -150,7 +212,10 @@ const changeRole = async (req, res) => {
     }
 }
 
+
+
 module.exports = {
+    upload,
     register,
     login,
     logout,
@@ -158,5 +223,6 @@ module.exports = {
     current,
     recoveryRequest,
     restore,
-    changeRole
+    changeRole,
+    uploadDocuments
 }

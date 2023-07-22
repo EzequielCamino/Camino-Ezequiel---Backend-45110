@@ -9,12 +9,15 @@ const storage = multer.diskStorage({
         } */
         let directory
         const value = req.file?? req.files[0];
+        console.log(value)
         switch (value.fieldname) {
             case 'thumbnails':
                 directory = 'img/products';
                 break;
-            case 'profile':
-                directory = 'img/profiles';
+            case 'documents':
+                file.originalname.startsWith('profile') ?
+                directory = 'img/profiles'
+                : directory = 'documents'
                 break;
             default:
                 directory = 'documents';

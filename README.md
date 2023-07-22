@@ -83,3 +83,9 @@ All endpoints and their respective routes/bodies can be find here:
 `Password: adminCod3r123` 
 
 - On endpoint [http://localhost:8080/products](http://localhost:8080/products) the button "Add product to cart" doesn't work properly, it only shows the product ID in console ("Create cart" endpoint fetch commented)
+
+- On endpoint 'http://localhost:8080/api/sessions/premium/:id' documents must start with the following names in order to validate correctly:
+'profile'
+'address'
+'identification'
+'status'
