@@ -7,11 +7,11 @@ const passport = require('passport')
 
 route.post("/", create);
 route.get("/:cid", getById);
-route.post("/:cid/products/:pid", passport.authenticate('jwt'), premiumUserAuth, addProduct);
+route.post("/:cid/products/:pid", premiumUserAuth, addProduct);
 route.delete("/:cid", removeCart);
 route.put("/:cid", updateCart);
 route.put("/:cid/products/:pid", updateProduct);
 route.delete("/:cid/products/:pid", removeProduct);
-route.post('/:cid/purchase', passport.authenticate('jwt'), premiumUserAuth, purchase);
+route.post('/:cid/purchase', premiumUserAuth, purchase);
 
 module.exports = route;

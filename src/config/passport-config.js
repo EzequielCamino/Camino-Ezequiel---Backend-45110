@@ -8,6 +8,7 @@ const config = require("./config.js")
 const LocalStrategy = local.Strategy;
 const GithubStrategy = github.Strategy;
 const JwtStrategy = jwt.Strategy;
+const cartService = require("../dao/services/mongo/cart.service.js");
 
 function cookieExtractor(req){
     return req?.cookies?.['jwt'];
@@ -24,7 +25,8 @@ const initializePassport = () => {
                     return done(null, false);
                 }
                 const hash = createHash(user.password);
-                const response = await usersModel.create({...user, password: hash});
+                const cartID = await cartService.create()
+                const response = await usersModel.create({...user, cart: cartID ,password: hash});
                 return done(null, response);
             } catch (error) {
                 return done(`Error al registrar usuario: ${error}`)

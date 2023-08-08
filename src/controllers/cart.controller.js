@@ -46,6 +46,7 @@ const addProduct = async (req, res) => {
             return res.status(403).send({warn: "You can't add your own products to cart"});
         }
         let cart = await CartService.findById(cid)
+        console.log(cart)
         if(!cart){
             const user = req.user;
             cart = await CartService.create();
@@ -59,7 +60,7 @@ const addProduct = async (req, res) => {
         } else{
             cart.products.push({product: pid, quantity: 1})
         }
-        await CartService.findByIdAndUpdate(cid, cart);
+        await CartService.findByIdAndUpdate({_id: cid}, cart);
         res.status(201).send({message: `Product with ID ${pid} successfully added to cart`})
     } catch (error) {
         logger.error('Handled error', error);

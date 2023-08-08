@@ -5,7 +5,6 @@ async function register(event) {
     const email = document.getElementById('form-email').value;
     const age = document.getElementById('form-age').value;
     const password = document.getElementById('form-password').value;
-    
     api.post('/api/sessions/register', {
         name,
         lastname,
@@ -21,8 +20,11 @@ async function register(event) {
             title: "¡User registered OK!",
             html: `User ID is ${data._id}`,
             icon: 'success'
-        }).then(()=>{
-            window.location.href = "/products";
+        }).then(async ()=>{
+            await api.post('/api/sessions/logout')
+        })
+        .then(() =>{
+            window.location.replace("/api/sessions/login");
         });
     })
 }

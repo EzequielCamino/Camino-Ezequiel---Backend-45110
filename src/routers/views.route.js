@@ -135,25 +135,27 @@ route.get('/api/sessions/dashboard', adminAuth ,async (req, res) => {
     res.render('dashboard', {users});
 })
 
-route.get('/api/carts/checkout', privateAuth, async (req, res) => {
+route.get('/api/carts/checkout', passport.authenticate('jwt'), privateAuth, async (req, res) => {
     const cartID = req.user.cart._id;
     const cart = await cartModel.findById({_id: cartID}).populate({path: 'products', populate: {path: 'product'}}).lean();
     const cartProds = [];
-    for (const prod of cart.products) {
-        const mock = {
-            _id: prod.product._id,
-            title: prod.product.title,
-            description: prod.product.description,
-            code: prod.product.code,
-            price: prod.product.price,
-            status: prod.product.status,
-            stock: prod.product.stock,
-            category: prod.product.category,
-            owner: prod.product.owner,
-            thumbnails: prod.product.thumbnails,
-            quantity: prod.quantity
+    if(cart){
+        for (const prod of cart.products) {
+            const mock = {
+                _id: prod.product._id,
+                title: prod.product.title,
+                description: prod.product.description,
+                code: prod.product.code,
+                price: prod.product.price,
+                status: prod.product.status,
+                stock: prod.product.stock,
+                category: prod.product.category,
+                owner: prod.product.owner,
+                thumbnails: prod.product.thumbnails,
+                quantity: prod.quantity
+            }
+            cartProds.push(mock);
         }
-        cartProds.push(mock);
     }
     res.render('checkout', {
         cartProds,
