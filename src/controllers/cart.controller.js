@@ -39,7 +39,7 @@ const getById = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
-        const cid = req.params.cid;
+        let cid = req.params.cid;
         const pid = req.params.pid;
         const product = await ProductService.findById(pid);
         if(product.owner === res.user.email){

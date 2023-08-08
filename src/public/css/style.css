@@ -41,6 +41,11 @@ tr:hover {
     flex-direction: column;
     align-items: center;
 }
+.centeredBtn {
+    margin-left: 45%;
+    margin-top: 3%;
+    width: 10%;
+}
 .buttons{
     display: flex;
     justify-content: space-around;
