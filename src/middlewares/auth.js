@@ -1,5 +1,5 @@
 const privateAuth = (req, res, next) => {
-    const userID = req.session.user;
+    const userID = req.session.passport;
     if(userID){
         next();
     } else {
@@ -8,8 +8,7 @@ const privateAuth = (req, res, next) => {
 }
 
 const publicAuth = (req, res, next) => {
-    
-    const userID = req.session.user;
+    const userID = req.session.passport;
     if(!userID){
         next();
     } else {

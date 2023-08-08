@@ -9,17 +9,19 @@ function setNext(){
     query.set('page', nextPage);
     window.location.search = query.toString();
 }
-async function addProduct(id){
-    console.log(id);
-/*     const response = await fetch('/api/carts/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-          },
+async function addProduct(productID, cartID){
+    api.post(`/api/carts/${cartID}/products/${productID}`)
+    .then((data) => {
+        if(!data.message) {
+            if(!data.warn){
+                return alert('Something went wrong. Please try again');
+            }
+            return alert(data.warn);
+        }
+        alert(data.message);
     });
-    console.log(response) */
 }
 
-function logout() {
+async function logout() {
     api.post('../../api/sessions/logout');
 }

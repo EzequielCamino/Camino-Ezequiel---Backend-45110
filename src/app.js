@@ -35,7 +35,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: config.MONGO_URL,
         mongoOptions:{useNewUrlParser: true, useUnifiedTopology: true},
-        ttl: 15
+        ttl: 3600
     }),
     secret: config.COOKIESECRET,
     resave: true,

@@ -52,7 +52,6 @@ const initializePassport = () => {
                     return done('wrong mail or password', false);
                 }
                 await usersModel.findOneAndUpdate({email: username}, {last_connection: new Date()})
-                /* req.session.role = "usuario" */
                 return done(null, user);
             } catch (error) {
                 return done(error);

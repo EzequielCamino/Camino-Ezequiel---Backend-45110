@@ -12,6 +12,8 @@ if(config.PERSISTENCE === "fs") {
     ProductService = require("../dao/services/mongo/product.service.js");
 }
 const logger = require('../utils/winston.js');
+const usersModel = require("../dao/services/mongo/models/user.model.js");
+const configureSocket = require("../config/configure-socket.js");
 
 
 const create = async (req, res) => {
@@ -41,9 +43,16 @@ const addProduct = async (req, res) => {
         const pid = req.params.pid;
         const product = await ProductService.findById(pid);
         if(product.owner === res.user.email){
-            return res.status(403).send({error: "You can't add your own products to cart"});
+            return res.status(403).send({warn: "You can't add your own products to cart"});
         }
-        const cart = await CartService.findById(cid)
+        let cart = await CartService.findById(cid)
+        if(!cart){
+            const user = req.user;
+            cart = await CartService.create();
+            user.cart._id = cart._id;
+            await usersModel.findByIdAndUpdate({_id: user._id}, user);
+            cid = cart._id
+        }
         const productExists = cart.products.find(products=> products.product == pid);
         if(productExists){
             cart.products.find(products=> products.product == pid).quantity++
@@ -51,7 +60,7 @@ const addProduct = async (req, res) => {
             cart.products.push({product: pid, quantity: 1})
         }
         await CartService.findByIdAndUpdate(cid, cart);
-        res.status(201).send({message: 'Product successfully added to cart'})
+        res.status(201).send({message: `Product with ID ${pid} successfully added to cart`})
     } catch (error) {
         logger.error('Handled error', error);
         res.status(400).send({error: 'Product was not added. Cart or product ID not found'});

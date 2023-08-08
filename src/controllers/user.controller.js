@@ -2,18 +2,14 @@ const usersModel = require("../dao/services/mongo/models/user.model.js");
 const UserService = require("../dao/services/mongo/user.service.js");
 const { generateToken } = require("../utils/jwt.js")
 const logger = require('../utils/winston.js');
-const { sendRecoverMail } = require('../utils/mail.js');
+const { sendRecoverMail, sendDeletedUserMail } = require('../utils/mail.js');
 const { createHash, validateHash } = require('../utils/bcrypt.js');
 const uploader = require("../utils/multer.js");
 const { profile } = require("winston");
-
 const upload = uploader.array('documents');
+const config = require('../config/config.js');
+const configureSocket = require("../config/configure-socket.js");
 
-/* (req, res, next) => {
-    if(req.body.documents){
-        uploader.array('documents')
-    }
-} */
 const uploadProfile = (req, res, next) => {
     req.body.profile? uploader.array('profile') : next()
 };
@@ -121,35 +117,12 @@ const uploadDocuments = async (req, res) => {
         const files = req.files;
         console.log(files);
         const user = await usersModel.findOne({_id: id});
-        /* const status = files.map(f => (
-            switch (f.originalname) {
-                case profile:
-                    profile: true
-                    break;
-                case 
-                default:
-                    res.status(404).send({error: 'Documents failed to upload. User ID not found'});
-                    break;
-            }
-                
-
-        )) */
         const documents = files.map(f => ({
             name: f.originalname,
             reference: `/public/documents/${f.filename}`
           }))
         user.documents.push(...documents);
         await usersModel.findByIdAndUpdate({_id: id}, {documents: user.documents});
-        /* const status = {
-            files.forEach(file => {
-                file.originalname
-            })
-        }
-        const documents = [...user?.documents, files.forEach(file => {
-            name: file.originalname
-            reference: file.path
-        })]; */
-        /* user.status = true; */
         res.status(201).send({ message: `Files uploaded successfully and user with ID ${id} updated` });
     } catch (error) {
         logger.error('Handled error', error);
@@ -158,26 +131,6 @@ const uploadDocuments = async (req, res) => {
 }
 
 const changeRole = async (req, res) => {
-    /* const role = req.user.role;
-    const id = req.params.id;
-    console.log(role, id)
-    if (role === "user"){
-        try {
-            await usersModel.findOneAndUpdate({_id: id}, {role: "premium"})
-            return res.status(200).send({status:"role changed to premium"});
-        } catch (error) {
-            return res.status(400).send({error: "User ID not found"})
-        }
-    }
-    if (role === "premium"){
-        try {
-            await usersModel.findOneAndUpdate({_id: id}, {role: "user"})
-            return res.status(200).send({status:"role changed to user"});
-        } catch (error) {
-            return res.status(400).send({error: "User ID not found"})
-        }
-    }
-    res.status(400).send({error: "Admins can't change their role"}); */
     const id = req.params.id
     try {
         const user = await usersModel.findOne({_id: id})
@@ -212,6 +165,72 @@ const changeRole = async (req, res) => {
     }
 }
 
+const getUsers = async (req, res) => {
+    try {
+        const users = await usersModel.find();
+        const filteredUsers = []
+        users.forEach(user => {
+            const dto = {
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+            filteredUsers.push(dto);
+        });
+        res.status(200).send({Users: filteredUsers});
+    } catch (error) {
+        return res.status(500).send({error: "Something went wrong"});
+    }
+}
+
+const deleteInactiveUser = async (req, res) => {
+    try {
+        const users = await usersModel.find();
+        const deletedUsers = []
+        for (const user of users) {
+            const inactiveTime = new Date() - user.last_connection;
+            if(user.name !== "admin" && inactiveTime > config.INACTIVE_TIME){
+                deletedUsers.push(user.email);
+                await sendDeletedUserMail(user.email, user.name, user.lastname)
+                await usersModel.findByIdAndDelete({_id: user._id});
+                configureSocket().getSocketServer().emit('usersModified');
+            }
+        }
+        res.status(200).send({deletedUsers: deletedUsers});
+    } catch (error) {
+        return res.status(500).send({error: "Something went wrong"});
+    }
+}
+
+const changeRoleAdmin = async (req, res) =>{
+    const id = req.body.id;
+    try {
+        const user = await usersModel.findOne({_id: id});
+        if(user.role === "premium"){
+            await usersModel.findOneAndUpdate({_id: id}, {role: "user"})
+            configureSocket().getSocketServer().emit('usersModified');
+            return res.status(200).send({status:"role changed to user"});
+        }
+        if(user.role === "user"){
+            await usersModel.findOneAndUpdate({_id: id}, {role: "premium"})
+            configureSocket().getSocketServer().emit('usersModified');
+            return res.status(200).send({status:"role changed to premium"});
+        }
+    } catch (error) {
+        return res.status(500).send({error: "Something went wrong"});
+    }
+}
+
+const deleteUser = async (req, res) => {
+    const id = req.params.id;
+    try {
+        await usersModel.findByIdAndDelete({_id: id});
+        configureSocket().getSocketServer().emit('usersModified');
+        res.status(200).send({DeletedUserID: id});
+    } catch (error) {
+        return res.status(500).send({error: "Something went wrong"});
+    }
+}
 
 
 module.exports = {
@@ -224,5 +243,9 @@ module.exports = {
     recoveryRequest,
     restore,
     changeRole,
-    uploadDocuments
+    uploadDocuments,
+    getUsers,
+    deleteInactiveUser,
+    changeRoleAdmin,
+    deleteUser
 }

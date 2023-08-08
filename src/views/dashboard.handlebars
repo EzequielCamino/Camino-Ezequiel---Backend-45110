@@ -1,0 +1,35 @@
+
+{{#if users}}
+<table class="table">
+    <thead>
+        <th>User email</th>
+        <th>Role</th>
+        <th>Change role</th>
+        <th>Delete user</th>
+    </thead>
+    <tbody>
+        {{#each users}}
+        <tr>
+            <td>{{this.email}}</td>
+            <td>{{this.role}}</td>
+            <td>
+                {{#if this.admin}}
+                    <p>Admin role can't be changed</p>
+                {{else}}
+                    <button onclick="changeRole('{{this._id}}')">Change role</button>
+                {{/if}}
+            </td>
+            <td><button onclick="deleteUser('{{this._id}}')">Delete user</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<button class="centeredBtn" onclick="deleteInactive()">Delete inactive users</button>
+{{else}}
+<div>
+    <h1>Aún no hay usuarios registrados</h1>
+</div>
+{{/if}}
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="../../js/dashboard.js"></script>

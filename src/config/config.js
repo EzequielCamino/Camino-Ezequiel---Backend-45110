@@ -25,6 +25,7 @@ const config = {
     TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
     TWILIO_SMS_NUMBER: process.env.TWILIO_SMS_NUMBER,
     MY_NUMBER: process.env.MY_NUMBER,
+    INACTIVE_TIME: process.env.INACTIVE_TIME,
     PERSISTENCE: mode,
     ENVIRONMENT: environment
 }

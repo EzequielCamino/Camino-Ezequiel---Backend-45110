@@ -4,7 +4,7 @@ const productManager = require("../dao/services/mongo/product.service.js")
 const productsModel = require("../dao/services/mongo/models/product.model.js");
 const cartModel = require("../dao/services/mongo/models/cart.model.js");
 const usersModel = require("../dao/services/mongo/models/user.model.js");
-const {publicAuth, privateAuth, userAuth} = require("../middlewares/auth.js")
+const {publicAuth, privateAuth, userAuth, adminAuth} = require("../middlewares/auth.js")
 const passport = require('passport');
 const { verifyToken } = require('../utils/jwt.js');
 
@@ -47,8 +47,9 @@ route.get('/realtimeproducts', async (req, res) => {
     })
 })
 
-route.get('/products',privateAuth, async (req,res)=>{
+route.get('/products', privateAuth, async (req,res)=>{
     const { page, limit, sort, ...query } = req.query;
+    const cartID = req.user.cart._id;
     const products = await productsModel.paginate(
         query,
         {page: page ?? 1,
@@ -58,12 +59,15 @@ route.get('/products',privateAuth, async (req,res)=>{
         }
     );
     const badPagination = page && (isNaN(page) || products.page > products.totalPages || page < 1)
-    const email = req.session.user;
-    const role = req.session.role;
+    const session = req.session.passport.user;
+    const user = await usersModel.findById({_id: session})
+    const email = user.email;
+    const role = user.role;
     res.render('products', {
         title: "Backend 45110 - Products",
         email,
         role,
+        cartID,
         products: products.docs,
         pages: products.totalPages,
         page: products.page,
@@ -116,6 +120,42 @@ route.get('/api/sessions/recover/:token', async (req, res) => {
             wrongToken
         })
     }
+})
+
+route.get('/api/sessions/dashboard', adminAuth ,async (req, res) => {
+    const users = await usersModel.find().lean();
+    for (const user of users) {
+        if(user.role === "admin"){
+            user.admin = true;
+        }
+    }
+    res.render('dashboard', {users});
+})
+
+route.get('/api/carts/checkout', privateAuth, async (req, res) => {
+    const cartID = req.user.cart._id;
+    const cart = await cartModel.findById({_id: cartID}).populate({path: 'products', populate: {path: 'product'}}).lean();
+    const cartProds = [];
+    for (const prod of cart.products) {
+        const mock = {
+            _id: prod.product._id,
+            title: prod.product.title,
+            description: prod.product.description,
+            code: prod.product.code,
+            price: prod.product.price,
+            status: prod.product.status,
+            stock: prod.product.stock,
+            category: prod.product.category,
+            owner: prod.product.owner,
+            thumbnails: prod.product.thumbnails,
+            quantity: prod.quantity
+        }
+        cartProds.push(mock);
+    }
+    res.render('checkout', {
+        cartProds,
+        cartID
+    });
 })
 
 module.exports = route;

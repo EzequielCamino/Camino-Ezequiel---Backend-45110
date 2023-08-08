@@ -15,6 +15,7 @@ if(config.PERSISTENCE === "fs") {
     ProductService = require("../dao/services/mongo/product.service.js");
 }
 const logger = require('../utils/winston.js');
+const { sendEliminatedProductMail } = require('../utils/mail.js');
 
 function deleteFiles(files){
     files.forEach(element => {            
@@ -115,8 +116,11 @@ const remove = async (req, res) => {
         }
         if(product.thumbnails){
             deleteFiles(product.thumbnails)
-        }            
+        }
         await ProductService.findByIdAndDelete(pid);
+        if(product.owner !== "admin"){
+            sendEliminatedProductMail(product.owner, pid);
+        }
         configureSocket().getSocketServer().emit('productsModified');
         return res.status(201).send({DeletedProductID: pid})
     } catch (error) {

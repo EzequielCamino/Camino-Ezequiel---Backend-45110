@@ -1,5 +1,5 @@
-{{#if products }}
-<div>
+<h1>CART</h1>
+{{#if cartProds}}
     <table class="table">
         <thead>
             <th>ID</th>
@@ -11,9 +11,11 @@
             <th>Stock</th>
             <th>Category</th>
             <th>Thumbnails</th>
+            <th>Quantity</th>
+            <th>Remove</th>
         </thead>
         <tbody>
-            {{#each products}}
+            {{#each cartProds}}
             <tr>
                 <td>{{this._id}}</td>
                 <td>{{this.title}}</td>
@@ -25,19 +27,24 @@
                 <td>{{this.category}}</td>
                 <td>
                     {{#each this.thumbnails}}
-                    <img src="./img/products/{{this}}" alt="" style="height: 200px">
+                    <img src="../../img/products/{{this}}" style="height: 200px">
                     {{/each}}
                 </td>
+                <td>{{this.quantity}}</td>
+                <td><button onclick="removeBtn('{{this._id}}')">X</button></td>
             </tr>
             {{/each}}
         </tbody>
     </table>
-</div>
+    <button class="centeredBtn" onclick="checkout('{{cartID}}')">¡Buy this cart!</button>
 {{else}}
-<div>
-    <h1>Aún no hay productos cargados</h1>
-    <h1>o ninguno coincide con el criterio de búsqueda</h1>
-</div>
+<h1>You don't have any products in cart</h1>
 {{/if}}
-<script src="/socket.io/socket.io.js"></script>
-<script src="js/realTimeProducts.js"></script>
+<script>
+    function removeBtn(productID) {
+        const cartID = '{{cartID}}'
+        removeProduct(productID, cartID)
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../js/checkout.js"></script>

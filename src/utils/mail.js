@@ -38,4 +38,33 @@ function sendRecoverMail(email, token){
     })
 }
 
-module.exports = { transport, sendPurchaseMail, sendRecoverMail };
+function sendDeletedUserMail(email, name, lastname){
+    transport.sendMail({
+        from: 'E-commerce <ezeeqii@gmail.com>',
+        to: email,
+        subject: 'User eliminated due to inactivity',
+        html:`
+        <div>
+          <h1>Dear ${name} ${lastname},</h1>
+          <p>Your user has been eliminated from our website due to inactivity.</p>
+          <p>Please remember that maximum inactive time is 48hs</p>
+        </div>
+        `
+    })
+}
+
+function sendEliminatedProductMail(email, pid) {
+    transport.sendMail({
+        from: 'E-commerce <ezeeqii@gmail.com>',
+        to: email,
+        subject: 'Products eliminated',
+        html:`
+        <div>
+          <h1>Dear customer,</h1>
+          <p>Your product with id ${pid} has been eliminated</p>
+        </div>
+        `
+    })
+}
+
+module.exports = { transport, sendPurchaseMail, sendRecoverMail, sendDeletedUserMail, sendEliminatedProductMail };

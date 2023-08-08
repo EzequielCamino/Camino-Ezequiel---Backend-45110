@@ -24,5 +24,14 @@ const api = {
         if(response) {
             return await response.json();
         }
+    },
+    delete: async(url) => {
+        const response = await fetch(url, {
+            method: "DELETE",
+            headers: { 'Content-Type': 'application/json' }
+        })
+        if(response) {
+            return await response.json();
+        }
     }
 }
