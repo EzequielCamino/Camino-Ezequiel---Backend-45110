@@ -44,6 +44,8 @@ async function restore(event){
     if(!password || !password2){
         return alert("Please type 2 times new password");
     }
+    console.log(email)
+    console.log(password)
     api.post('/api/sessions/restore', {
         email,
         password

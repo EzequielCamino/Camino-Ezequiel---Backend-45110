@@ -13,6 +13,7 @@ dotenv.config()
 
 const config = {
     PORT: process.env.PORT,
+    SITE_URL: process.env.SITE_URL,
     MONGO_URL: process.env.MONGO_URL,
     COOKIESECRET: process.env.COOKIESECRET,
     githubClientID: process.env.githubClientID,

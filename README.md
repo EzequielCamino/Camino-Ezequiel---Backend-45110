@@ -79,6 +79,9 @@ All endpoints and their respective routes/bodies can be find here:
 - Cookie test: [http://localhost:8080/cookies](http://localhost:8080/cookies)
 - Logger Test: [http://localhost:8080/api/loggerTest](http://localhost:8080/api/loggerTest)
 
+## Deployment
+[https://camino-ezequiel-backend-45110-production.up.railway.app/](https://camino-ezequiel-backend-45110-production.up.railway.app/)
+
 ## Notes
 
 - To Login as an admin use the following credentials:

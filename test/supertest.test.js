@@ -1,8 +1,9 @@
 const supertest = require('supertest');
 const { expect } = require('chai');
+const config = require('../src/config/config.js')
 
 describe('Ecommerce app test', async() => {
-    const requester = supertest('http://localhost:8080');
+    const requester = supertest(`${config.SITE_URL}`);
     describe('Products testing', () => {
         it('El endpoint GET /api/products debe traer todos los productos', async ()=>{
             const products = await requester.get('/api/products');

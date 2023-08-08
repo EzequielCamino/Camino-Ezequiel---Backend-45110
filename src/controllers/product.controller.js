@@ -47,8 +47,8 @@ const getAll = async (req, res) => {
             page: products.page,
             hasPrevPage: products.hasPrevPage,
             hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage ? `http://localhost:8080/products?page=${page-1}` : null,
-            nextLink: products.hasNextPage ? `http://localhost:8080/products?page=${page+1}` : null
+            prevLink: products.hasPrevPage ? `${config.SITE_URL}/products?page=${page-1}` : null,
+            nextLink: products.hasNextPage ? `${config.SITE_URL}/products?page=${page+1}` : null
         });
     } catch (error) {
         logger.error('Handled error', error);

@@ -1,7 +1,7 @@
 {{#if wrongToken}}
 <div>
     <h1>This link has expired or it's invalid</h1>
-    <h1><a href="http://localhost:8080/api/sessions/login">Click here to create a new one</a></h1>
+    <h1><a href='{{SITE_URL}}/api/sessions/login'>Click here to create a new one</a></h1>
 </div>
 {{else}}
 <div>
@@ -10,7 +10,7 @@
         <input type="hidden" name="form-email" id="form-email" value={{email}}>
         <input type="password" name="form-password" id="form-password" placeholder="New password">
         <input type="password" name="form-password2" id="form-password2" placeholder="Repeat password">
-        <input type="submit" value="restore">
+        <input type="submit" value="Restore">
     </form>
 </div>
 {{/if}}

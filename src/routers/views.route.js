@@ -7,6 +7,7 @@ const usersModel = require("../dao/services/mongo/models/user.model.js");
 const {publicAuth, privateAuth, userAuth, adminAuth} = require("../middlewares/auth.js")
 const passport = require('passport');
 const { verifyToken } = require('../utils/jwt.js');
+const { SITE_URL } = require('../config/config.js');
 
 route.get('/', async (req, res) => {
     const products = await productManager.getAll();
@@ -115,7 +116,8 @@ route.get('/api/sessions/recover/:token', async (req, res) => {
         const wrongToken = false;
         res.render('recover', {
             email,
-            wrongToken
+            wrongToken,
+            SITE_URL
         })
     } catch (error) {
         const wrongToken = true;

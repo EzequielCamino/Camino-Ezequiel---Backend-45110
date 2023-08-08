@@ -32,7 +32,7 @@ function sendRecoverMail(email, token){
         html:`
         <div>
           <h1>Here is your link to recover your password</h1>
-          <p> http://localhost:8080/api/sessions/recover/${token} </p>
+          <p> ${config.SITE_URL}/api/sessions/recover/${token} </p>
         </div>
         `
     })
