@@ -17,6 +17,12 @@ async function register(event) {
         if(!data._id) {
             return alert('User already registered or incomplete data.')
         }
-        alert(`User registered OK with ID ${data._id}`)
+        Swal.fire({
+            title: "¡User registered OK!",
+            html: `User ID is ${data._id}`,
+            icon: 'success'
+        }).then(()=>{
+            window.location.href = "/products";
+        });
     })
 }

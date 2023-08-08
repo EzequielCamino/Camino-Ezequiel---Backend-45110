@@ -90,3 +90,7 @@ All endpoints and their respective routes/bodies can be find here:
 'address'
 'identification'
 'status'
+
+- In order to test Premium user created products behavior. Product N°12(Drew House White Face Socks) was created by user with credentials:
+`Username: ezeeqii@gmail.com`
+`Password: contraseña` 
