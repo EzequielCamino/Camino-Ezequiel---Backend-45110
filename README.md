@@ -70,6 +70,9 @@ All endpoints and their respective routes/bodies can be find here:
 - Login (not accesible if logged in): [http://localhost:8080/api/sessions/login](http://localhost:8080/api/sessions/login)
 - Profile (has to be logged in): [http://localhost:8080/api/sessions/profile](http://localhost:8080/api/sessions/profile)
 - Current (looks for JWT token): [http://localhost:8080/api/sessions/current](http://localhost:8080/api/sessions/current)
+- Dashboard (only Admin can access): [http://localhost:8080/api/sessions/dashboard](http://localhost:8080/api/sessions/dashboard)
+- Cart (has to be logged in): [http://localhost:8080/api/carts/checkout](http://localhost:8080/api/carts/checkout)
+- Restore password (needs a unique JWT): [http://localhost:8080/api/sessions/recover/:token](http://localhost:8080/api/sessions/recover/:token)
 
 #### Other views:
 - Chat with socket (only accesible as an User): [http://localhost:8080/chat](http://localhost:8080/chat)
@@ -81,8 +84,6 @@ All endpoints and their respective routes/bodies can be find here:
 - To Login as an admin use the following credentials:
 `Username: adminCoder@coder.com`
 `Password: adminCod3r123` 
-
-- On endpoint [http://localhost:8080/products](http://localhost:8080/products) the button "Add product to cart" doesn't work properly, it only shows the product ID in console ("Create cart" endpoint fetch commented)
 
 - On endpoint 'http://localhost:8080/api/sessions/premium/:id' documents must start with the following names in order to validate correctly:
 'profile'

@@ -29,8 +29,9 @@ route.get('/api/sessions/login', publicAuth, async (req,res) => {
 })
 
 route.get('/api/sessions/profile', privateAuth, async (req,res) => {
-    const email = req.session.user;
-    const user = await usersModel.findOne({email})
+    const id = req.session.passport.user;
+    const user = await usersModel.findOne({_id: id})
+    console.log(user);
     res.render('profile', {
         name: user.name,
         lastname: user.lastname,
@@ -63,11 +64,13 @@ route.get('/products', privateAuth, async (req,res)=>{
     const user = await usersModel.findById({_id: session})
     const email = user.email;
     const role = user.role;
+    const admin = role === "admin" ? true : false
     res.render('products', {
         title: "Backend 45110 - Products",
         email,
         role,
         cartID,
+        admin,
         products: products.docs,
         pages: products.totalPages,
         page: products.page,
@@ -79,7 +82,7 @@ route.get('/products', privateAuth, async (req,res)=>{
     });
 })
 
-route.get('/chat', passport.authenticate('jwt'), userAuth, (req, res) => {
+route.get('/chat', userAuth, (req, res) => {
     res.render('message');
 });
 

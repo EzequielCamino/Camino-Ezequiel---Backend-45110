@@ -1,5 +1,10 @@
-<button onclick="logout()">Log out</button>
-<button onclick="window.location.href='/api/carts/checkout'" {{!-- onclick="checkout('{{cartID}}')" --}}>¡Buy cart!</button>
+<div class="buttons">
+    <button onclick="logout()">Log out</button>
+    {{#if admin}}
+        <button onclick="window.location.href='/api/sessions/dashboard'" class="dashboardBtn">Go to Dashboard</button>
+    {{/if}}
+    <button onclick="window.location.href='/api/carts/checkout'" class="checkoutBtn">Go to Cart</button>
+</div>
 <h1>Welcome {{email}}, your role is {{role}}</h1>
 {{#if badPagination }}
 <div>
